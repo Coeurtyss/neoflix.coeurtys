@@ -1,742 +1,322 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NEOFLIX — Abonnements Streaming</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{background:#08080D;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
-
-    /* ── HEADER ── */
-    .site-header{text-align:center;padding:64px 20px 50px;background:#08080D}
-    .logo{display:inline-block;font-size:clamp(44px,10vw,88px);font-weight:900;letter-spacing:.2em;text-transform:uppercase;background:linear-gradient(135deg,#E50914 0%,#FF5C67 45%,#7B4FD4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 40px rgba(229,9,20,.4))}
-    .site-tagline{margin-top:16px;font-size:clamp(11px,2vw,15px);font-weight:500;color:#6666AA;letter-spacing:.14em;text-transform:uppercase}
-    .nav-pills{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:32px}
-    .nav-pill{padding:8px 18px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:.06em;text-decoration:none;text-transform:uppercase;border:2px solid;transition:all .2s ease}
-    .pill-n{color:#E50914;border-color:rgba(229,9,20,.5);background:rgba(229,9,20,.08)}
-    .pill-p{color:#00A8E1;border-color:rgba(0,168,225,.5);background:rgba(0,168,225,.08)}
-    .pill-c{color:#FF6D00;border-color:rgba(255,109,0,.5);background:rgba(255,109,0,.08)}
-    .pill-s{color:#1DB954;border-color:rgba(29,185,84,.5);background:rgba(29,185,84,.08)}
-    .nav-pill:hover{transform:translateY(-2px);filter:brightness(1.2)}
-
-    /* ── PLATFORM SECTIONS ── */
-    .platform-section{position:relative;overflow:hidden;padding:0 0 70px}
-    .platform-hero{position:relative;height:340px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
-    .platform-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center top;filter:brightness(.42) saturate(1.2);transition:transform 8s ease}
-    .platform-section:hover .platform-hero-bg{transform:scale(1.04)}
-    .platform-hero-overlay{position:absolute;inset:0}
-    .overlay-netflix{background:linear-gradient(to bottom,rgba(229,9,20,.1) 0%,transparent 40%,rgba(8,8,13,.85) 80%,#08080D 100%)}
-    .overlay-prime{background:linear-gradient(to bottom,rgba(0,168,225,.12) 0%,transparent 40%,rgba(8,8,13,.85) 80%,#08080D 100%)}
-    .overlay-crunchyroll{background:linear-gradient(to bottom,rgba(255,109,0,.12) 0%,transparent 40%,rgba(8,8,13,.85) 80%,#08080D 100%)}
-    .overlay-spotify{background:linear-gradient(to bottom,rgba(29,185,84,.12) 0%,transparent 40%,rgba(8,8,13,.85) 80%,#08080D 100%)}
-    .platform-hero-content{position:relative;z-index:2;text-align:center;padding:0 20px 28px}
-    .platform-logo-badge{display:inline-flex;align-items:center;gap:10px;padding:7px 20px;border-radius:50px;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;border:2px solid;margin-bottom:12px;backdrop-filter:blur(8px)}
-    .badge-n{color:#FF3B3B;border-color:rgba(229,9,20,.6);background:rgba(229,9,20,.15)}
-    .badge-p{color:#29C4F6;border-color:rgba(0,168,225,.6);background:rgba(0,168,225,.15)}
-    .badge-c{color:#FF8C00;border-color:rgba(255,109,0,.6);background:rgba(255,109,0,.15)}
-    .badge-s{color:#1DB954;border-color:rgba(29,185,84,.6);background:rgba(29,185,84,.15)}
-    .badge-dot{width:8px;height:8px;border-radius:50%}
-    .platform-title{font-size:clamp(28px,5vw,50px);font-weight:900;line-height:1.1;text-shadow:0 4px 24px rgba(0,0,0,.6)}
-    .platform-subtitle{margin-top:8px;font-size:13px;color:rgba(255,255,255,.6)}
-
-    /* ── CARDS ── */
-    .platform-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;max-width:1080px;margin:-20px auto 0;padding:0 24px;position:relative;z-index:3}
-    .platform-cards.three-cols{grid-template-columns:repeat(auto-fit,minmax(230px,1fr));max-width:820px}
-    .pcard{border-radius:18px;padding:26px 22px 22px;position:relative;overflow:hidden;border:1.5px solid rgba(255,255,255,.07);background:rgba(14,14,22,.92);backdrop-filter:blur(12px);transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
-    .pcard.theme-n:hover{transform:translateY(-7px);border-color:rgba(229,9,20,.55);box-shadow:0 24px 60px rgba(229,9,20,.2)}
-    .pcard.theme-n.featured{border-color:rgba(229,9,20,.4);box-shadow:0 0 40px rgba(229,9,20,.15)}
-    .pcard.theme-p:hover{transform:translateY(-7px);border-color:rgba(0,168,225,.55);box-shadow:0 24px 60px rgba(0,168,225,.2)}
-    .pcard.theme-p.featured{border-color:rgba(0,168,225,.4);box-shadow:0 0 40px rgba(0,168,225,.15)}
-    .pcard.theme-c:hover{transform:translateY(-7px);border-color:rgba(255,109,0,.55);box-shadow:0 24px 60px rgba(255,109,0,.2)}
-    .pcard.theme-c.featured{border-color:rgba(255,109,0,.4);box-shadow:0 0 40px rgba(255,109,0,.15)}
-    .pcard.theme-s:hover{transform:translateY(-7px);border-color:rgba(29,185,84,.55);box-shadow:0 24px 60px rgba(29,185,84,.2)}
-    .pcard.theme-s.featured{border-color:rgba(29,185,84,.4);box-shadow:0 0 40px rgba(29,185,84,.15)}
-    .pcard-glow{position:absolute;top:0;left:0;right:0;height:2px;border-radius:18px 18px 0 0}
-    .glow-n{background:linear-gradient(90deg,transparent,#E50914,transparent)}
-    .glow-p{background:linear-gradient(90deg,transparent,#00A8E1,transparent)}
-    .glow-c{background:linear-gradient(90deg,transparent,#FF6D00,transparent)}
-    .glow-s{background:linear-gradient(90deg,transparent,#1DB954,transparent)}
-    .featured-tag{position:absolute;top:13px;right:13px;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:50px}
-    .ftag-n{background:linear-gradient(135deg,#E50914,#FF5C67);color:#fff}
-    .ftag-p{background:linear-gradient(135deg,#0072B8,#00C6FF);color:#fff}
-    .ftag-c{background:linear-gradient(135deg,#E05C00,#FF9A3C);color:#fff}
-    .ftag-s{background:linear-gradient(135deg,#148F42,#1DB954);color:#fff}
-    .ftag-gold{background:linear-gradient(135deg,#D4A017,#FFD700);color:#000}
-    .pcard-dur{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#66667A}
-    .pcard-price{display:flex;align-items:baseline;gap:5px;margin-top:10px}
-    .pcard-amount{font-size:clamp(28px,4vw,38px);font-weight:900;color:#fff;line-height:1}
-    .pcard-unit{font-size:13px;font-weight:600;color:#55556A}
-    .pcard-monthly{font-size:11px;color:#55556A;margin-top:4px}
-    .pcard-saving{display:inline-block;margin-top:7px;font-size:10px;font-weight:700;color:#4ADE80;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:50px;padding:3px 10px}
-    .pcard-features{margin-top:16px;display:flex;flex-direction:column;gap:7px}
-    .pfeature{display:flex;align-items:center;gap:9px;font-size:12px;color:#B0B0C8}
-    .pf-check{width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;flex-shrink:0}
-    .check-n{background:rgba(229,9,20,.18);color:#FF5C67}
-    .check-p{background:rgba(0,168,225,.18);color:#29C4F6}
-    .check-c{background:rgba(255,109,0,.18);color:#FF8C00}
-    .check-s{background:rgba(29,185,84,.18);color:#1DB954}
-    .pcta{display:block;width:100%;margin-top:20px;padding:13px 18px;border-radius:11px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease}
-    .pcta::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.09),transparent);border-radius:11px}
-    .btn-n{background:linear-gradient(135deg,#E50914,#B20710);color:#fff;box-shadow:0 6px 22px rgba(229,9,20,.38)}
-    .btn-n:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(229,9,20,.5)}
-    .btn-p{background:linear-gradient(135deg,#0072B8,#00A8E1);color:#fff;box-shadow:0 6px 22px rgba(0,168,225,.35)}
-    .btn-p:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,168,225,.48)}
-    .btn-c{background:linear-gradient(135deg,#CC4E00,#FF6D00);color:#fff;box-shadow:0 6px 22px rgba(255,109,0,.38)}
-    .btn-c:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,109,0,.5)}
-    .btn-s{background:linear-gradient(135deg,#148F42,#1DB954);color:#fff;box-shadow:0 6px 22px rgba(29,185,84,.38)}
-    .btn-s:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(29,185,84,.5)}
-
-    /* ── FAQ ACCORDÉON ── */
-    .faq-section{max-width:780px;margin:48px auto 0;padding:0 24px}
-    .faq-title{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-    .faq-title span{display:inline-block;width:28px;height:2px;border-radius:2px}
-    .faq-item{border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;margin-bottom:8px;background:rgba(14,14,22,.7);transition:border-color .25s}
-    .faq-item:hover{border-color:rgba(255,255,255,.14)}
-    .faq-item.open{border-color:var(--faq-color,rgba(255,255,255,.2))}
-    .faq-q{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;cursor:pointer;gap:12px;user-select:none}
-    .faq-q-text{font-size:13px;font-weight:600;color:#E0E0F0;line-height:1.4;flex:1}
-    .faq-arrow{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:rgba(255,255,255,.07);color:#888;transition:transform .3s,background .2s}
-    .faq-item.open .faq-arrow{transform:rotate(180deg);background:var(--faq-color,rgba(255,255,255,.15));color:#fff}
-    .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s}
-    .faq-item.open .faq-a{max-height:300px}
-    .faq-a-inner{padding:0 18px 16px;font-size:12px;color:#8888A8;line-height:1.7}
-    .faq-a-inner strong{color:#C0C0D8}
-
-    /* ── MODAL ── */
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center;padding:16px}
-    .modal-overlay.active{display:flex}
-    .modal{background:#0E0E1A;border:1.5px solid rgba(255,255,255,.1);border-radius:26px;width:100%;max-width:500px;overflow:hidden;animation:modalIn .3s ease;position:relative;max-height:90vh;overflow-y:auto}
-    @keyframes modalIn{from{opacity:0;transform:translateY(28px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-    .modal-top{padding:30px 28px 22px;text-align:center;position:relative;border-bottom:1px solid rgba(255,255,255,.06)}
-    .modal-top::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--modal-color,#E50914)}
-    .modal-top::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,var(--modal-glow,rgba(229,9,20,.12)),transparent 70%);pointer-events:none}
-    .modal-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.07);border:none;color:#888;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2}
-    .modal-close:hover{background:rgba(255,255,255,.15);color:#fff}
-    .modal-platform-icon{font-size:34px;margin-bottom:8px;display:block}
-    .modal-platform-name{display:inline-block;padding:4px 14px;border-radius:50px;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid;margin-bottom:10px}
-    .modal-offer-label{font-size:12px;color:#7777AA;font-weight:500;margin-bottom:5px}
-    .modal-price-display{font-size:44px;font-weight:900;color:#fff;line-height:1}
-    .modal-price-display sup{font-size:16px;font-weight:700;color:#7777AA;vertical-align:super;margin-left:4px}
-    .modal-duration-pill{display:inline-block;margin-top:8px;padding:5px 14px;border-radius:50px;font-size:12px;font-weight:700;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#C0C0D8}
-    .modal-body{padding:18px 22px 26px}
-    .pay-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-    .pay-tab{border-radius:14px;padding:14px 10px;border:2px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);cursor:pointer;text-align:center;transition:all .25s ease}
-    .pay-tab:hover{transform:translateY(-2px)}
-    .pay-tab.active-tab{border-color:var(--tab-color);background:var(--tab-bg);box-shadow:0 0 20px var(--tab-shadow)}
-    .pay-tab-logo{font-size:28px;margin-bottom:6px}
-    .pay-tab-name{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
-    .pay-tab-num{font-size:13px;font-weight:700;color:#fff}
-    .pay-tab-status{font-size:10px;margin-top:4px;color:#4ADE80;font-weight:600;opacity:0;transition:opacity .2s}
-    .pay-tab.active-tab .pay-tab-status{opacity:1}
-    .pay-panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:18px;margin-bottom:16px;display:none}
-    .pay-panel.visible{display:block;animation:fadeIn .25s ease}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-    .pay-panel-title{font-size:11px;font-weight:700;color:#7777AA;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
-    .pay-number-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-    .pay-number-label{font-size:10px;color:#7777AA;font-weight:600;margin-bottom:3px}
-    .pay-number-value{font-size:16px;font-weight:800;color:#fff;letter-spacing:.04em}
-    .copy-btn{padding:7px 14px;border-radius:8px;border:none;font-family:'Inter',sans-serif;font-size:10px;font-weight:800;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .2s;white-space:nowrap}
-    .pay-amount-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 14px}
-    .pay-amount-label{font-size:10px;color:#7777AA;font-weight:600;margin-bottom:3px}
-    .pay-amount-value{font-size:18px;font-weight:900;color:#fff}
-    .copy-btn-amount{padding:7px 14px;border-radius:8px;border:none;font-family:'Inter',sans-serif;font-size:10px;font-weight:800;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .2s;white-space:nowrap;background:rgba(255,255,255,.1);color:#fff}
-    .copy-btn-amount:hover{background:rgba(255,255,255,.18)}
-    .steps{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
-    .step-row{display:flex;align-items:flex-start;gap:11px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
-    .step-n{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px}
-    .step-t{font-size:12px;color:#B0B0C8;line-height:1.5}
-    .step-t strong{color:#fff}
-    .wa-confirm-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;border-radius:13px;background:#25D366;color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;text-decoration:none;letter-spacing:.04em;border:none;cursor:pointer;box-shadow:0 6px 24px rgba(37,211,102,.35);transition:transform .2s,box-shadow .2s}
-    .wa-confirm-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(37,211,102,.5)}
-    .modal-note{text-align:center;font-size:11px;color:#44445A;margin-top:10px}
-
-    /* ── DIVIDER ── */
-    .section-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
-
-    /* ── INFO ── */
-    .info-section{background:#0B0B13;padding:56px 24px}
-    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;max-width:900px;margin:0 auto}
-    .info-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:22px 18px;text-align:center}
-    .info-box .icon{font-size:24px;margin-bottom:10px}
-    .info-box h4{font-size:13px;font-weight:700;color:#fff;margin-bottom:5px}
-    .info-box p{font-size:11px;color:#55556A;line-height:1.65}
-
-    /* ── FOOTER ── */
-    footer{background:#08080D;text-align:center;padding:44px 20px 30px;border-top:1px solid rgba(255,255,255,.05)}
-    .footer-logo{font-size:22px;font-weight:900;letter-spacing:.2em;background:linear-gradient(135deg,#E50914,#7B4FD4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    footer p{margin-top:10px;font-size:12px;color:#44445A}
-    footer a{color:#55556A;text-decoration:none}
-    footer a:hover{color:#fff}
-
-    /* ── FLOAT WA ── */
-    .wa-float{position:fixed;bottom:26px;right:26px;z-index:200;background:#25D366;color:#fff;border-radius:50px;padding:13px 22px;font-size:13px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:9px;box-shadow:0 8px 32px rgba(37,211,102,.45);transition:transform .2s,box-shadow .2s}
-    .wa-float:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(37,211,102,.55)}
-
-    /* ── TOAST ── */
-    .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:#1A1A2E;color:#fff;font-size:13px;font-weight:600;padding:10px 22px;border-radius:50px;border:1px solid rgba(255,255,255,.12);z-index:9999;opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
-    .toast.show{opacity:1}
-
-    @media(max-width:640px){
-      .platform-hero{height:260px}
-      .platform-cards{grid-template-columns:1fr 1fr;gap:12px;padding:0 14px}
-      .wa-float .wa-label{display:none}
-      .modal-price-display{font-size:36px}
-      .faq-section{padding:0 14px}
-    }
-    @media(max-width:400px){.platform-cards{grid-template-columns:1fr}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apple Star — Boutique de téléphones à Bertoua, Cameroun</title>
+<meta name="description" content="Apple Star, votre boutique de téléphones à Bertoua. iPhone, Samsung, Tecno, Infinix et accessoires. Commande directe sur WhatsApp, livraison à toute heure.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⭐</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=satoshi@400,500,700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-<div class="toast" id="toast"></div>
-
-<!-- ══ MODAL PAIEMENT ══ -->
-<div class="modal-overlay" id="payModal">
-  <div class="modal">
-    <div class="modal-top" id="modalTop">
-      <button class="modal-close" onclick="closeModal()">✕</button>
-      <span class="modal-platform-icon" id="modalIcon"></span>
-      <div class="modal-platform-name" id="modalPlatformName"></div>
-      <div class="modal-offer-label">Votre offre sélectionnée</div>
-      <div class="modal-price-display" id="modalPriceDisplay"></div>
-      <div class="modal-duration-pill" id="modalDurationPill"></div>
+<header class="site">
+  <nav class="nav">
+    <a href="index.html" class="logo"><span class="star">★</span> Apple Star</a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Accueil</a>
+      <a href="catalogue.html">Catalogue</a>
+      <a href="apropos.html">À propos</a>
+      <a href="contact.html">Contact</a>
     </div>
-    <div class="modal-body">
-      <div class="pay-tabs">
-        <div class="pay-tab" id="tabMTN" onclick="selectMethod('mtn')">
-          <div class="pay-tab-logo">🟡</div>
-          <div class="pay-tab-name" style="color:#FFCC00">MTN MoMo</div>
-          <div class="pay-tab-num">+237 682 470 908</div>
-          <div class="pay-tab-status">✓ Sélectionné</div>
-        </div>
-        <div class="pay-tab" id="tabOrange" onclick="selectMethod('orange')">
-          <div class="pay-tab-logo">🟠</div>
-          <div class="pay-tab-name" style="color:#FF6600">Orange Money</div>
-          <div class="pay-tab-num">+237 695 956 018</div>
-          <div class="pay-tab-status">✓ Sélectionné</div>
-        </div>
-      </div>
-      <div class="pay-panel" id="panelMTN">
-        <div class="pay-panel-title">🟡 Paiement via MTN Mobile Money</div>
-        <div class="pay-number-row">
-          <div><div class="pay-number-label">Numéro MTN MoMo</div><div class="pay-number-value">+237 682 470 908</div></div>
-          <button class="copy-btn" style="background:#FFCC00;color:#000" onclick="copyText('237682470908','Numéro MTN')">📋 Copier</button>
-        </div>
-        <div class="pay-amount-row">
-          <div><div class="pay-amount-label">Montant exact à envoyer</div><div class="pay-amount-value" id="mtnAmount"></div></div>
-          <button class="copy-btn-amount" onclick="copyAmount()">📋 Copier</button>
-        </div>
-        <!-- CODE USSD MTN -->
-        <div style="margin-top:12px;background:rgba(255,204,0,0.06);border:1.5px dashed rgba(255,204,0,0.35);border-radius:12px;padding:14px 16px;">
-          <div style="font-size:10px;font-weight:800;color:#FFCC00;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">📱 Code USSD à composer</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-            <div id="mtnUssd" style="font-size:15px;font-weight:800;color:#fff;letter-spacing:.05em;word-break:break-all;flex:1;font-family:monospace;background:rgba(0,0,0,0.3);padding:8px 12px;border-radius:8px;"></div>
-            <button class="copy-btn" style="background:#FFCC00;color:#000;flex-shrink:0" onclick="copyUssd('mtn')">📋 Copier</button>
-          </div>
-          <div style="margin-top:8px;font-size:11px;color:#88886A;">Composez ce code sur votre téléphone et validez l'envoi.</div>
-        </div>
-      </div>
-      <div class="pay-panel" id="panelOrange">
-        <div class="pay-panel-title">🟠 Paiement via Orange Money</div>
-        <div class="pay-number-row">
-          <div><div class="pay-number-label">Numéro Orange Money</div><div class="pay-number-value">+237 695 956 018</div></div>
-          <button class="copy-btn" style="background:#FF6600;color:#fff" onclick="copyText('237695956018','Numéro Orange')">📋 Copier</button>
-        </div>
-        <div class="pay-amount-row">
-          <div><div class="pay-amount-label">Montant exact à envoyer</div><div class="pay-amount-value" id="orangeAmount"></div></div>
-          <button class="copy-btn-amount" onclick="copyAmount()">📋 Copier</button>
-        </div>
-        <!-- CODE USSD ORANGE -->
-        <div style="margin-top:12px;background:rgba(255,102,0,0.06);border:1.5px dashed rgba(255,102,0,0.35);border-radius:12px;padding:14px 16px;">
-          <div style="font-size:10px;font-weight:800;color:#FF6600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">📱 Code USSD à composer</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-            <div id="orangeUssd" style="font-size:15px;font-weight:800;color:#fff;letter-spacing:.05em;word-break:break-all;flex:1;font-family:monospace;background:rgba(0,0,0,0.3);padding:8px 12px;border-radius:8px;"></div>
-            <button class="copy-btn" style="background:#FF6600;color:#fff;flex-shrink:0" onclick="copyUssd('orange')">📋 Copier</button>
-          </div>
-          <div style="margin-top:8px;font-size:11px;color:#88886A;">Composez ce code sur votre téléphone et validez l'envoi.</div>
-        </div>
-      </div>
-      <div class="steps">
-        <div class="step-row"><div class="step-n" id="s1">1</div><div class="step-t"><strong>Envoyez le montant exact</strong> au numéro choisi via MTN ou Orange Money.</div></div>
-        <div class="step-row"><div class="step-n" id="s2">2</div><div class="step-t"><strong>Notez votre référence</strong> de transaction (ex : TXN-XXXXXXX).</div></div>
-        <div class="step-row"><div class="step-n" id="s3">3</div><div class="step-t"><strong>Envoyez la preuve</strong> (capture ou référence) sur WhatsApp.</div></div>
-        <div class="step-row"><div class="step-n" id="s4">4</div><div class="step-t">Abonnement <strong>activé en quelques minutes</strong> ⚡</div></div>
-      </div>
-      <a class="wa-confirm-btn" id="modalWaBtn" href="#" target="_blank">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Confirmer sur WhatsApp
-      </a>
-      <p class="modal-note">📲 Envoyez votre preuve pour activer votre accès immédiatement</p>
+    <div class="nav-actions">
+      <a href="https://wa.me/237695956018?text=Bonjour%20Apple%20Star%2C%20je%20voudrais%20des%20informations%20sur%20vos%20t%C3%A9l%C3%A9phones%20et%20vos%20tarifs." class="btn btn-green btn-sm" target="_blank" rel="noopener">💬 Commander</a>
+      <button class="burger" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
     </div>
-  </div>
-</div>
-
-<!-- FLOAT WA -->
-<a class="wa-float" href="https://wa.me/237695956018?text=Bonjour%20NEOFLIX%20%F0%9F%91%8B%20je%20suis%20int%C3%A9ress%C3%A9%20par%20un%20abonnement%20!" target="_blank">
-  <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  <span class="wa-label">Nous contacter</span>
-</a>
-
-<!-- HEADER -->
-<header class="site-header">
-  <div class="logo">NEOFLIX</div>
-  <p class="site-tagline">Votre passeport premium vers 4 univers de streaming</p>
-  <nav class="nav-pills">
-    <a href="#netflix" class="nav-pill pill-n">🎬 Netflix</a>
-    <a href="#prime" class="nav-pill pill-p">📦 Prime Vidéo</a>
-    <a href="#crunchyroll" class="nav-pill pill-c">⛩️ Crunchyroll</a>
-    <a href="#spotify" class="nav-pill pill-s">🎵 Spotify</a>
   </nav>
+  <div class="mobile-panel">
+    <a href="index.html">Accueil</a>
+    <a href="catalogue.html">Catalogue</a>
+    <a href="apropos.html">À propos</a>
+    <a href="contact.html">Contact</a>
+  </div>
 </header>
 
-<!-- ══════════════ NETFLIX ══════════════ -->
-<section class="platform-section" id="netflix">
-  <div class="platform-hero">
-    <div class="platform-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=1400&q=80&fit=crop')"></div>
-    <div class="platform-hero-overlay overlay-netflix"></div>
-    <div class="platform-hero-content">
-      <div class="platform-logo-badge badge-n"><span class="badge-dot" style="background:#E50914"></span>Netflix</div>
-      <h2 class="platform-title">Séries & Films <span style="color:#E50914">Sans Limites</span></h2>
-      <p class="platform-subtitle">Accès complet au catalogue Netflix — films, séries, documentaires</p>
-    </div>
-  </div>
-  <div class="platform-cards">
-    <div class="pcard theme-n">
-      <div class="pcard-glow glow-n"></div>
-      <div class="pcard-dur">1 Mois</div>
-      <div class="pcard-price"><span class="pcard-amount">2 500</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">30 jours d'accès</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-n">✓</div>Catalogue complet Netflix</div>
-        <div class="pfeature"><div class="pf-check check-n">✓</div>HD & 4K disponible</div>
-        <div class="pfeature"><div class="pf-check check-n">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-n" onclick="openModal('netflix','Netflix','🎬','1 Mois','2 500 FCFA','2500')">💳 Payer maintenant</button>
-    </div>
-    <div class="pcard theme-n featured">
-      <div class="pcard-glow glow-n"></div>
-      <div class="featured-tag ftag-n">⭐ Populaire</div>
-      <div class="pcard-dur">3 Mois</div>
-      <div class="pcard-price"><span class="pcard-amount">6 500</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
-      <div class="pcard-saving">Économisez 13%</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-n">✓</div>Catalogue complet Netflix</div>
-        <div class="pfeature"><div class="pf-check check-n">✓</div>HD & 4K disponible</div>
-        <div class="pfeature"><div class="pf-check check-n">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-n" onclick="openModal('netflix','Netflix','🎬','3 Mois','6 500 FCFA','6500')">💳 Payer maintenant</button>
-    </div>
-    <div class="pcard theme-n">
-      <div class="pcard-glow glow-n"></div>
-      <div class="pcard-dur">6 Mois</div>
-      <div class="pcard-price"><span class="pcard-amount">13 000</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
-      <div class="pcard-saving">Économisez 13%</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-n">✓</div>Catalogue complet Netflix</div>
-        <div class="pfeature"><div class="pf-check check-n">✓</div>HD & 4K disponible</div>
-        <div class="pfeature"><div class="pf-check check-n">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-n" onclick="openModal('netflix','Netflix','🎬','6 Mois','13 000 FCFA','13000')">💳 Payer maintenant</button>
-    </div>
-    <div class="pcard theme-n">
-      <div class="pcard-glow glow-n"></div>
-      <div class="featured-tag ftag-gold">🏆 Meilleure offre</div>
-      <div class="pcard-dur">1 An</div>
-      <div class="pcard-price"><span class="pcard-amount">25 000</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">≈ 2 083 FCFA / mois</div>
-      <div class="pcard-saving">Économisez 17%</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-n">✓</div>Catalogue complet Netflix</div>
-        <div class="pfeature"><div class="pf-check check-n">✓</div>HD & 4K disponible</div>
-        <div class="pfeature"><div class="pf-check check-n">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-n" onclick="openModal('netflix','Netflix','🎬','1 An','25 000 FCFA','25000')">💳 Payer maintenant</button>
-    </div>
-  </div>
-  <!-- FAQ NETFLIX -->
-  <div class="faq-section">
-    <div class="faq-title" style="color:#E50914"><span style="background:#E50914"></span>Questions fréquentes — Netflix</div>
-    <div class="faq-item" style="--faq-color:rgba(229,9,20,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Combien d'écrans puis-je utiliser simultanément ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Avec notre abonnement Netflix, vous pouvez regarder sur <strong>plusieurs écrans</strong> en même temps selon le profil fourni. Nous vous précisons le nombre exact lors de l'activation.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(229,9,20,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Est-ce que je peux regarder en 4K avec Netflix ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Oui ! Netflix propose du contenu en <strong>HD et 4K Ultra HD</strong> selon votre appareil et votre connexion internet. La qualité s'adapte automatiquement.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(229,9,20,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Puis-je télécharger des séries pour regarder hors connexion ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Oui, Netflix permet de <strong>télécharger des épisodes et films</strong> pour les regarder sans internet, idéal en voyage ou zone à faible connexion.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(229,9,20,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Sur quels appareils puis-je utiliser Netflix ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Netflix fonctionne sur <strong>smartphones, tablettes, Smart TV, ordinateurs, consoles de jeux</strong> (PlayStation, Xbox) et les clés TV comme Chromecast ou Fire Stick.</div></div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════ PRIME VIDEO ══════════════ -->
-<section class="platform-section" id="prime">
-  <div class="platform-hero">
-    <div class="platform-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1400&q=80&fit=crop')"></div>
-    <div class="platform-hero-overlay overlay-prime"></div>
-    <div class="platform-hero-content">
-      <div class="platform-logo-badge badge-p"><span class="badge-dot" style="background:#00A8E1"></span>Prime Vidéo</div>
-      <h2 class="platform-title">Originals <span style="color:#00A8E1">Amazon</span></h2>
-      <p class="platform-subtitle">Les meilleures productions Amazon et blockbusters exclusifs</p>
-    </div>
-  </div>
-  <div class="platform-cards">
-    <div class="pcard theme-p">
-      <div class="pcard-glow glow-p"></div>
-      <div class="pcard-dur">1 Mois</div>
-      <div class="pcard-price"><span class="pcard-amount">3 000</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">30 jours d'accès</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Originals Amazon inclus</div>
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Films & séries HD</div>
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-p" onclick="openModal('prime','Prime Vidéo','📦','1 Mois','3 000 FCFA','3000')">💶 Payer maintenant</button>
-    </div>
-    <div class="pcard theme-p featured">
-      <div class="pcard-glow glow-p"></div>
-      <div class="featured-tag ftag-p">⭐ Populaire</div>
-      <div class="pcard-dur">3 Mois</div>
-      <div class="pcard-price"><span class="pcard-amount">7 500</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
-      <div class="pcard-saving">Économisez 13%</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Originals Amazon inclus</div>
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Films & séries HD</div>
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-p" onclick="openModal('prime','Prime Vidéo','📦','3 Mois','7 500 FCFA','7500')">💶 Payer maintenant</button>
-    </div>
-    <div class="pcard theme-p">
-      <div class="pcard-glow glow-p"></div>
-      <div class="pcard-dur">6 Mois</div>
-      <div class="pcard-price"><span class="pcard-amount">13 000</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
-      <div class="pcard-saving">Économisez 13%</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Originals Amazon inclus</div>
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Films & séries HD</div>
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-p" onclick="openModal('prime','Prime Vidéo','📦','6 Mois','15 000 FCFA','15000')">💶 Payer maintenant</button>
-    </div>
-    <div class="pcard theme-p">
-      <div class="pcard-glow glow-p"></div>
-      <div class="featured-tag ftag-gold">🏆 Meilleure offre</div>
-      <div class="pcard-dur">1 An</div>
-      <div class="pcard-price"><span class="pcard-amount">30 000</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">≈ 2 083 FCFA / mois</div>
-      <div class="pcard-saving">Économisez 17%</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Originals Amazon inclus</div>
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Films & séries HD</div>
-        <div class="pfeature"><div class="pf-check check-p">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-p" onclick="openModal('prime','Prime Vidéo','📦','1 An','30 000 FCFA','30000')">💳 Payer maintenant</button>
-    </div>
-  </div>
-  <!-- FAQ PRIME -->
-  <div class="faq-section">
-    <div class="faq-title" style="color:#00A8E1"><span style="background:#00A8E1"></span>Questions fréquentes — Prime Vidéo</div>
-    <div class="faq-item" style="--faq-color:rgba(0,168,225,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Qu'est-ce qu'un Amazon Original ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Les <strong>Amazon Originals</strong> sont des séries et films produits exclusivement par Amazon, comme The Boys, Reacher, ou The Rings of Power. Ils ne sont disponibles que sur Prime Vidéo.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(0,168,225,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Prime Vidéo est-il disponible en Afrique ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Oui ! Prime Vidéo est <strong>accessible depuis le Cameroun et toute l'Afrique</strong> via notre abonnement NEOFLIX. Vous profitez du catalogue international sans restriction.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(0,168,225,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Puis-je regarder les matchs de sport sur Prime Vidéo ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Prime Vidéo propose certains <strong>événements sportifs en direct</strong>, notamment la NFL, la Ligue des Champions UEFA et des matchs de tennis Grand Chelem selon les régions.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(0,168,225,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Combien de personnes peuvent regarder en même temps ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Prime Vidéo permet jusqu'à <strong>3 flux simultanés</strong> sur un même compte, idéal pour toute la famille. Nous vous communiquons les détails lors de l'activation.</div></div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════ CRUNCHYROLL ══════════════ -->
-<section class="platform-section" id="crunchyroll">
-  <div class="platform-hero">
-    <div class="platform-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1400&q=80&fit=crop')"></div>
-    <div class="platform-hero-overlay overlay-crunchyroll"></div>
-    <div class="platform-hero-content">
-      <div class="platform-logo-badge badge-c"><span class="badge-dot" style="background:#FF6D00"></span>Crunchyroll</div>
-      <h2 class="platform-title">Anime <span style="color:#FF6D00">Premium</span></h2>
-      <p class="platform-subtitle">Le meilleur de l'animation japonaise — simulcast & catalogue exclusif</p>
-    </div>
-  </div>
-  <div class="platform-cards">
-    <div class="pcard theme-c">
-      <div class="pcard-glow glow-c"></div>
-      <div class="pcard-dur">1 Mois</div>
-      <div class="pcard-price"><span class="pcard-amount">2 500</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">30 jours d'accès</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Catalogue anime complet</div>
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Simulcast (dès la sortie)</div>
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-c" onclick="openModal('crunchyroll','Crunchyroll','⛩️','1 Mois','2 500 FCFA','2500')">💶 Payer maintenant</button>
-    </div>
-    <div class="pcard theme-c featured">
-      <div class="pcard-glow glow-c"></div>
-      <div class="featured-tag ftag-c">⭐ Populaire</div>
-      <div class="pcard-dur">3 Mois</div>
-      <div class="pcard-price"><span class="pcard-amount">6 500</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
-      <div class="pcard-saving">Économisez 13%</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Catalogue anime complet</div>
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Simulcast (dès la sortie)</div>
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-c" onclick="openModal('crunchyroll','Crunchyroll','⛩️','3 Mois','6 500 FCFA','6500')">💶 Payer maintenant</button>
-    </div>
-    <div class="pcard theme-c">
-      <div class="pcard-glow glow-c"></div>
-      <div class="pcard-dur">6 Mois</div>
-      <div class="pcard-price"><span class="pcard-amount">13 000</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
-      <div class="pcard-saving">Économisez 13%</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Catalogue anime complet</div>
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Simulcast (dès la sortie)</div>
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-c" onclick="openModal('crunchyroll','Crunchyroll','⛩️','6 Mois','13 000 FCFA','13000')">💶 Payer maintenant</button>
-    </div>
-    <div class="pcard theme-c">
-      <div class="pcard-glow glow-c"></div>
-      <div class="featured-tag ftag-gold">🏆 Meilleure offre</div>
-      <div class="pcard-dur">1 An</div>
-      <div class="pcard-price"><span class="pcard-amount">25 000</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">≈ 2 083 FCFA / mois</div>
-      <div class="pcard-saving">Économisez 17%</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Catalogue anime complet</div>
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Simulcast (dès la sortie)</div>
-        <div class="pfeature"><div class="pf-check check-c">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-c" onclick="openModal('crunchyroll','Crunchyroll','⛩️','1 An','25 000 FCFA','25000')">💶 Payer maintenant</button>
-    </div>
-  </div>
-  <!-- FAQ CRUNCHYROLL -->
-  <div class="faq-section">
-    <div class="faq-title" style="color:#FF6D00"><span style="background:#FF6D00"></span>Questions fréquentes — Crunchyroll</div>
-    <div class="faq-item" style="--faq-color:rgba(255,109,0,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Qu'est-ce que le simulcast sur Crunchyroll ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Le <strong>simulcast</strong> signifie que les épisodes d'anime sont disponibles sur Crunchyroll <strong>quelques heures après leur diffusion au Japon</strong>, souvent avec sous-titres en français.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(255,109,0,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Les animes sont-ils disponibles en français ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Oui ! Crunchyroll propose de nombreux animes avec des <strong>sous-titres en français</strong> et certains en <strong>doublage français (VOSTFR/VF)</strong>. Le catalogue en français s'agrandit chaque saison.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(255,109,0,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Combien d'animes sont disponibles sur Crunchyroll ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Crunchyroll possède la <strong>plus grande bibliothèque d'anime au monde</strong> avec plus de <strong>1 000 séries et 45 000 épisodes</strong>, des classiques aux nouvelles sorties chaque saison.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(255,109,0,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Puis-je regarder Crunchyroll sur ma télévision ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Absolument ! Crunchyroll est disponible sur <strong>Smart TV, Chromecast, Fire Stick, Apple TV, PlayStation et Xbox</strong>, en plus des smartphones, tablettes et PC.</div></div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════ SPOTIFY ══════════════ -->
-<section class="platform-section" id="spotify">
-  <div class="platform-hero">
-    <div class="platform-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1614680376739-414d95ff43df?w=1400&q=80&fit=crop')"></div>
-    <div class="platform-hero-overlay overlay-spotify"></div>
-    <div class="platform-hero-content">
-      <div class="platform-logo-badge badge-s"><span class="badge-dot" style="background:#1DB954"></span>Spotify</div>
-      <h2 class="platform-title">Musique <span style="color:#1DB954">Sans Pub</span></h2>
-      <p class="platform-subtitle">100 millions de titres, podcasts et playlists — sans interruption</p>
-    </div>
-  </div>
-  <div class="platform-cards three-cols">
-    <div class="pcard theme-s">
-      <div class="pcard-glow glow-s"></div>
-      <div class="pcard-dur">1 Mois</div>
-      <div class="pcard-price"><span class="pcard-amount">3 000</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">30 jours d'accès</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-s">✓</div>100M+ titres sans pub</div>
-        <div class="pfeature"><div class="pf-check check-s">✓</div>Écoute hors connexion</div>
-        <div class="pfeature"><div class="pf-check check-s">✓</div>Qualité audio premium</div>
-        <div class="pfeature"><div class="pf-check check-s">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-s" onclick="openModal('spotify','Spotify','🎵','1 Mois','3 000 FCFA','3000')">💶 Payer maintenant</button>
-    </div>
-    <div class="pcard theme-s featured">
-      <div class="pcard-glow glow-s"></div>
-      <div class="featured-tag ftag-s">⭐ Populaire</div>
-      <div class="pcard-dur">6 Mois</div>
-      <div class="pcard-price"><span class="pcard-amount">15 000</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">≈ 2 500 FCFA / mois</div>
-      <div class="pcard-saving">Économisez 17%</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-s">✓</div>100M+ titres sans pub</div>
-        <div class="pfeature"><div class="pf-check check-s">✓</div>Écoute hors connexion</div>
-        <div class="pfeature"><div class="pf-check check-s">✓</div>Qualité audio premium</div>
-        <div class="pfeature"><div class="pf-check check-s">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-s" onclick="openModal('spotify','Spotify','🎵','6 Mois','15 000 FCFA','15000')">💶 Payer maintenant</button>
-    </div>
-    <div class="pcard theme-s">
-      <div class="pcard-glow glow-s"></div>
-      <div class="featured-tag ftag-gold">🏆 Meilleure offre</div>
-      <div class="pcard-dur">1 An</div>
-      <div class="pcard-price"><span class="pcard-amount">30 000</span><span class="pcard-unit">FCFA</span></div>
-      <div class="pcard-monthly">≈ 2 500 FCFA / mois</div>
-      <div class="pcard-saving">Économisez 17%</div>
-      <div class="pcard-features">
-        <div class="pfeature"><div class="pf-check check-s">✓</div>100M+ titres sans pub</div>
-        <div class="pfeature"><div class="pf-check check-s">✓</div>Écoute hors connexion</div>
-        <div class="pfeature"><div class="pf-check check-s">✓</div>Qualité audio premium</div>
-        <div class="pfeature"><div class="pf-check check-s">✓</div>Activation immédiate</div>
-      </div>
-      <button class="pcta btn-s" onclick="openModal('spotify','Spotify','🎵','1 An','30 000 FCFA','30000')">💶 Payer maintenant</button>
-    </div>
-  </div>
-  <!-- FAQ SPOTIFY -->
-  <div class="faq-section">
-    <div class="faq-title" style="color:#1DB954"><span style="background:#1DB954"></span>Questions fréquentes — Spotify</div>
-    <div class="faq-item" style="--faq-color:rgba(29,185,84,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Spotify Premium supprime-t-il toutes les publicités ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Oui ! Avec Spotify Premium, vous écoutez de la musique <strong>sans aucune interruption publicitaire</strong>, que ce soit entre les chansons ou les podcasts.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(29,185,84,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Puis-je télécharger de la musique pour écouter sans internet ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Absolument ! Spotify Premium vous permet de <strong>télécharger jusqu'à 10 000 titres</strong> sur 5 appareils différents pour une écoute hors ligne totale.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(29,185,84,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Quelle est la qualité audio de Spotify Premium ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Spotify Premium offre une qualité audio allant jusqu'à <strong>320 kbps</strong>, bien supérieure à la version gratuite. Vous profitez aussi de l'audio spatial et Dolby Atmos sur certains titres.</div></div>
-    </div>
-    <div class="faq-item" style="--faq-color:rgba(29,185,84,.4)">
-      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Combien d'appareils puis-je utiliser avec Spotify ?</span><span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Vous pouvez installer Spotify sur <strong>autant d'appareils que vous voulez</strong>, mais l'écoute active n'est possible que sur un seul appareil à la fois. Le téléchargement hors ligne fonctionne sur jusqu'à 5 appareils.</div></div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- INFO -->
-<div class="info-section">
-  <div class="info-grid">
-    <div class="info-box"><div class="icon">🟡</div><h4>MTN Mobile Money</h4><p>Envoyez au <strong style="color:#FFCC00">+237 682 470 908</strong><br>Nom : AbIHEINDJOL FREYD</p></div>
-    <div class="info-box"><div class="icon">🟠</div><h4>Orange Money</h4><p>Envoyez au <strong style="color:#FF6600">+237 695 956 018</strong><br>Nom : ABIHEINDJOL FREYD</p></div>
-    <div class="info-box"><div class="icon">⚡</div><h4>Activation rapide</h4><p>Activé en quelques minutes après confirmation de votre paiement.</p></div>
-    <div class="info-box"><div class="icon">💬</div><h4>Support 7j/7</h4><p>Envoyez votre preuve de paiement sur WhatsApp pour validation.</p></div>
+<div class="ticker">
+  <div class="ticker-track">
+    <span><strong>Apple Star</strong> — Bertoua, Cameroun</span>
+    <span>Livraison disponible 24h/24, peu importe l'heure</span>
+    <span>Paiement MTN Mobile Money &amp; Orange Money</span>
+    <span>Garantie sur tous les appareils neufs</span>
+    <span>Commande directe sur WhatsApp</span>
   </div>
 </div>
 
-<footer>
-  <div class="footer-logo">NEOFLIX</div>
-  <p>© 2026 NEOFLIX-Coeurtys · Streaming sans frontières · Tous droits réservés</p>
-  <p style="margin-top:6px">📱 <a href="https://wa.me/237695956018" target="_blank">+237 695 956 018</a></p>
+<!-- HERO -->
+<section class="hero section-rel">
+  <div class="marquee-bg on-dark"></div>
+  <div class="glow"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Boutique mobile à Bertoua</p>
+        <h1>Faites <span class="accent">briller</span><br>votre style mobile.</h1>
+        <p class="lead">Apple Star, c'est le meilleur du smartphone à Bertoua : iPhone, Samsung, Tecno, Infinix et accessoires, à prix juste, avec une commande simple sur WhatsApp et une livraison qui ne dort jamais.</p>
+        <div class="hero-ctas">
+          <a href="catalogue.html" class="btn btn-coral">Voir le catalogue</a>
+          <a href="https://wa.me/237695956018?text=Bonjour%20Apple%20Star%2C%20je%20voudrais%20des%20informations%20sur%20vos%20t%C3%A9l%C3%A9phones%20et%20vos%20tarifs." class="btn btn-gold-outline" target="_blank" rel="noopener">Commander sur WhatsApp</a>
+        </div>
+        <div class="hero-badges">
+          <span class="hero-badge"><span class="dot"></span> Livraison 24h/24 à Bertoua</span>
+          <span class="hero-badge"><span class="dot"></span> Paiement Mobile Money</span>
+          <span class="hero-badge"><span class="dot"></span> Appareils garantis</span>
+        </div>
+      </div>
+      <div class="phone-stage">
+        <div class="phone-illust"></div>
+        <div class="phone-illust b"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust">
+  <div class="container">
+    <div class="trust-item">
+      <div class="ic">🚚</div>
+      <div><strong>Livraison à toute heure</strong><span>Jour et nuit, partout à Bertoua</span></div>
+    </div>
+    <div class="trust-item">
+      <div class="ic">📲</div>
+      <div><strong>Commande directe</strong><span>Choisissez, commandez sur WhatsApp</span></div>
+    </div>
+    <div class="trust-item">
+      <div class="ic">🟢</div>
+      <div><strong>MoMo &amp; Orange Money</strong><span>Paiement mobile simple et rapide</span></div>
+    </div>
+    <div class="trust-item">
+      <div class="ic">🛡️</div>
+      <div><strong>Garantie qualité</strong><span>Appareils vérifiés avant la vente</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section-rel">
+  <div class="marquee-bg on-light"></div>
+  <div class="container">
+    <div class="section-head center">
+      <p class="eyebrow" style="justify-content:center">Notre catalogue</p>
+      <h2>Une étoile pour chaque besoin</h2>
+      <p>Des smartphones neufs et reconditionnés, sélectionnés et testés, pour tous les budgets.</p>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card">
+        <div class="tag" style="background:var(--navy)">📱</div>
+        <h3>iPhone</h3>
+        <p>iPhone 12 à 16, neufs et reconditionnés UK.</p>
+        <a href="catalogue.html?cat=iphone">Découvrir →</a>
+      </div>
+      <div class="cat-card">
+        <div class="tag" style="background:var(--coral)">⭐</div>
+        <h3>Samsung</h3>
+        <p>Galaxy A et Galaxy S, pour tous les usages.</p>
+        <a href="catalogue.html?cat=samsung">Découvrir →</a>
+      </div>
+      <div class="cat-card">
+        <div class="tag" style="background:var(--green)">⚡</div>
+        <h3>Tecno &amp; Infinix</h3>
+        <p>Le meilleur rapport qualité-prix du marché.</p>
+        <a href="catalogue.html?cat=local">Découvrir →</a>
+      </div>
+      <div class="cat-card">
+        <div class="tag" style="background:var(--gold);color:var(--navy)">🎧</div>
+        <h3>Accessoires</h3>
+        <p>Écouteurs, chargeurs, coques, câbles, power banks.</p>
+        <a href="catalogue.html?cat=accessoires">Découvrir →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="on-dark section-rel">
+  <div class="marquee-bg on-dark"></div>
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Sélection du moment</p>
+      <h2>Nos meilleures ventes</h2>
+      <p>Quatre appareils particulièrement demandés cette semaine à Bertoua.</p>
+    </div>
+    <div class="product-grid">
+
+      <div class="product-card" data-cat="iphone">
+        <div class="product-media ph-1">
+          <span class="badge">Neuf</span>
+          <div class="mini-phone" style="background:linear-gradient(160deg,#3A4A8A,#0E1530)"></div>
+        </div>
+        <div class="product-body">
+          <h3>iPhone 15 — 128 Go</h3>
+          <p class="specs">Puce A16, écran 6.1", double capteur photo</p>
+          <div class="product-foot">
+            <span class="price">520 000 FCFA<small>prix boutique</small></span>
+            <button class="btn btn-coral btn-sm order-btn" data-name="iPhone 15 128 Go" data-price="520 000 FCFA">Commander</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-cat="samsung">
+        <div class="product-media ph-2">
+          <span class="badge">Neuf</span>
+          <div class="mini-phone" style="background:linear-gradient(160deg,#FFB36B,#E0502F)"></div>
+        </div>
+        <div class="product-body">
+          <h3>Samsung Galaxy S24 — 256 Go</h3>
+          <p class="specs">Écran AMOLED 6.2", 5G, charge rapide</p>
+          <div class="product-foot">
+            <span class="price">480 000 FCFA<small>prix boutique</small></span>
+            <button class="btn btn-coral btn-sm order-btn" data-name="Samsung Galaxy S24 256 Go" data-price="480 000 FCFA">Commander</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-cat="local">
+        <div class="product-media ph-3">
+          <span class="badge">Populaire</span>
+          <div class="mini-phone" style="background:linear-gradient(160deg,#39C57F,#15813F)"></div>
+        </div>
+        <div class="product-body">
+          <h3>Tecno Camon 30 Pro</h3>
+          <p class="specs">128 Go, caméra 50MP, grand écran AMOLED</p>
+          <div class="product-foot">
+            <span class="price">165 000 FCFA<small>prix boutique</small></span>
+            <button class="btn btn-coral btn-sm order-btn" data-name="Tecno Camon 30 Pro" data-price="165 000 FCFA">Commander</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-cat="accessoires">
+        <div class="product-media ph-4">
+          <span class="badge">Tendance</span>
+          <div class="mini-phone" style="background:linear-gradient(160deg,#F4D27A,#B5862A);width:60px;height:120px;border-radius:50px"></div>
+        </div>
+        <div class="product-body">
+          <h3>Écouteurs sans fil Pro</h3>
+          <p class="specs">Bluetooth 5.3, réduction de bruit, étui de charge</p>
+          <div class="product-foot">
+            <span class="price">15 000 FCFA<small>prix boutique</small></span>
+            <button class="btn btn-coral btn-sm order-btn" data-name="Écouteurs sans fil Pro" data-price="15 000 FCFA">Commander</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <a href="catalogue.html" class="btn btn-gold-outline">Voir tout le catalogue</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section-rel">
+  <div class="marquee-bg on-light"></div>
+  <div class="container">
+    <div class="section-head center">
+      <p class="eyebrow" style="justify-content:center">Simple et rapide</p>
+      <h2>Commander chez Apple Star en 3 étapes</h2>
+    </div>
+    <div class="cat-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="cat-card">
+        <div class="tag" style="background:var(--navy)">1</div>
+        <h3>Choisissez</h3>
+        <p>Parcourez le catalogue et trouvez le téléphone qui vous correspond.</p>
+      </div>
+      <div class="cat-card">
+        <div class="tag" style="background:var(--coral)">2</div>
+        <h3>Commandez sur WhatsApp</h3>
+        <p>Un clic sur « Commander » ouvre WhatsApp avec votre demande prête à envoyer.</p>
+      </div>
+      <div class="cat-card">
+        <div class="tag" style="background:var(--green)">3</div>
+        <h3>Recevez, à toute heure</h3>
+        <p>Nous confirmons le paiement (MoMo/OM) et livrons à Bertoua, jour comme nuit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section-rel" style="background:var(--cream-2)">
+  <div class="container">
+    <div class="section-head center">
+      <p class="eyebrow" style="justify-content:center">Ils nous font confiance</p>
+      <h2>Avis de nos clients à Bertoua</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>« Commandé un Tecno un dimanche soir, livré chez moi en moins d'une heure. Sérieux et rapide. »</p>
+        <div class="who"><div class="avatar">M</div><div><strong>Marlyse N.</strong><span>Quartier Vinde, Bertoua</span></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>« Mon iPhone reconditionné fonctionne comme neuf. Le paiement Mobile Money a rendu tout très simple. »</p>
+        <div class="who"><div class="avatar">D</div><div><strong>Désiré K.</strong><span>Centre-ville, Bertoua</span></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>« Service au téléphone très clair, prix honnêtes. Apple Star est devenue ma boutique de référence. »</p>
+        <div class="who"><div class="avatar">A</div><div><strong>Aïssatou B.</strong><span>Madagascar, Bertoua</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section style="padding-top:0;">
+  <div class="cta-band">
+    <h2>Une question avant de commander ?</h2>
+    <p>Notre équipe répond directement sur WhatsApp, à toute heure du jour ou de la nuit.</p>
+    <div class="btns">
+      <a href="https://wa.me/237695956018?text=Bonjour%20Apple%20Star%2C%20j%27ai%20une%20question." class="btn btn-coral" style="background:#fff;color:var(--coral-dark)" target="_blank" rel="noopener">💬 Écrire sur WhatsApp</a>
+      <a href="catalogue.html" class="btn btn-gold-outline" style="border-color:#fff;color:#fff">Voir le catalogue</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-logo">★ Apple Star</div>
+      <p>Votre boutique de téléphones à Bertoua, Cameroun. iPhone, Samsung, Tecno, Infinix et accessoires — commande directe, livraison à toute heure.</p>
+    </div>
+    <div>
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="catalogue.html">Catalogue</a></li>
+        <li><a href="apropos.html">À propos</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Catégories</h4>
+      <ul>
+        <li><a href="catalogue.html?cat=iphone">iPhone</a></li>
+        <li><a href="catalogue.html?cat=samsung">Samsung</a></li>
+        <li><a href="catalogue.html?cat=local">Tecno &amp; Infinix</a></li>
+        <li><a href="catalogue.html?cat=accessoires">Accessoires</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="https://wa.me/237695956018" target="_blank" rel="noopener">WhatsApp : +237 695 95 60 18</a></li>
+        <li>Bertoua, Région de l'Est, Cameroun</li>
+        <li>Ouvert 7j/7 — livraison 24h/24</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Apple Star — Bertoua, Cameroun. Tous droits réservés.</div>
 </footer>
 
-<script>
-  const PLATFORMS = {
-    netflix:     {color:'#E50914', glow:'rgba(229,9,20,0.18)',    stepBg:'#E50914', nameStyle:'color:#FF5C67;border-color:rgba(229,9,20,0.5);background:rgba(229,9,20,0.12)'},
-    prime:       {color:'#00A8E1', glow:'rgba(0,168,225,0.18)',   stepBg:'#00A8E1', nameStyle:'color:#29C4F6;border-color:rgba(0,168,225,0.5);background:rgba(0,168,225,0.12)'},
-    crunchyroll: {color:'#FF6D00', glow:'rgba(255,109,0,0.18)',   stepBg:'#FF6D00', nameStyle:'color:#FF8C00;border-color:rgba(255,109,0,0.5);background:rgba(255,109,0,0.12)'},
-    spotify:     {color:'#1DB954', glow:'rgba(29,185,84,0.18)',   stepBg:'#1DB954', nameStyle:'color:#1DB954;border-color:rgba(29,185,84,0.5);background:rgba(29,185,84,0.12)'}
-  };
+<a class="float-wa" href="https://wa.me/237695956018?text=Bonjour%20Apple%20Star%2C%20je%20voudrais%20des%20informations%20sur%20vos%20t%C3%A9l%C3%A9phones%20et%20vos%20tarifs." target="_blank" rel="noopener" aria-label="Contacter Apple Star sur WhatsApp">💬</a>
 
-  let currentAmount='', currentPlatform='', currentDuration='', currentPrice='';
-
-  function openModal(key, name, icon, duration, price, amount) {
-    const cfg = PLATFORMS[key];
-    currentAmount=amount; currentPlatform=name; currentDuration=duration; currentPrice=price;
-    const top = document.getElementById('modalTop');
-    top.style.setProperty('--modal-color', cfg.color);
-    top.style.setProperty('--modal-glow', cfg.glow);
-    document.getElementById('tabMTN').style.setProperty('--tab-color','#FFCC00');
-    document.getElementById('tabMTN').style.setProperty('--tab-bg','rgba(255,204,0,0.1)');
-    document.getElementById('tabMTN').style.setProperty('--tab-shadow','rgba(255,204,0,0.2)');
-    document.getElementById('tabOrange').style.setProperty('--tab-color','#FF6600');
-    document.getElementById('tabOrange').style.setProperty('--tab-bg','rgba(255,102,0,0.1)');
-    document.getElementById('tabOrange').style.setProperty('--tab-shadow','rgba(255,102,0,0.2)');
-    document.getElementById('modalIcon').textContent = icon;
-    const nameEl = document.getElementById('modalPlatformName');
-    nameEl.textContent = name; nameEl.style.cssText = cfg.nameStyle;
-    document.getElementById('modalPriceDisplay').innerHTML = price.replace(' FCFA','') + '<sup>FCFA</sup>';
-    document.getElementById('modalDurationPill').textContent = '📅 ' + duration;
-    document.getElementById('mtnAmount').textContent = price;
-    document.getElementById('orangeAmount').textContent = price;
-    // Codes USSD dynamiques
-    document.getElementById('mtnUssd').textContent   = '*126*1*1*682470908*' + amount + '#';
-    document.getElementById('orangeUssd').textContent = '#150*1*1*695956018*' + amount + '#';
-    ['s1','s2','s3','s4'].forEach(id=>{
-      document.getElementById(id).style.background = cfg.stepBg;
-      document.getElementById(id).style.color = '#fff';
-    });
-    const msg = encodeURIComponent('Bonjour NEOFLIX 👋\n\nJe viens d\'effectuer mon paiement :\n📺 Plateforme : '+name+'\n📅 Durée : '+duration+'\n💰 Montant : '+price+'\n\nCi-joint ma preuve de paiement. Merci d\'activer mon accès ! 🙏');
-    document.getElementById('modalWaBtn').href = 'https://wa.me/237695956018?text=' + msg;
-    document.getElementById('payModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-    selectMethod('mtn');
-  }
-
-  function selectMethod(m) {
-    ['tabMTN','tabOrange'].forEach(id=>document.getElementById(id).classList.remove('active-tab'));
-    ['panelMTN','panelOrange'].forEach(id=>document.getElementById(id).classList.remove('visible'));
-    if(m==='mtn'){document.getElementById('tabMTN').classList.add('active-tab');document.getElementById('panelMTN').classList.add('visible');}
-    else{document.getElementById('tabOrange').classList.add('active-tab');document.getElementById('panelOrange').classList.add('visible');}
-  }
-
-  function closeModal(){
-    document.getElementById('payModal').classList.remove('active');
-    document.body.style.overflow='';
-  }
-
-  document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-
-  function copyText(t,label){navigator.clipboard.writeText('+'+t).then(()=>showToast('✅ '+label+' copié !'))}
-  function copyAmount(){navigator.clipboard.writeText(currentAmount).then(()=>showToast('✅ Montant '+currentPrice+' copié !'))}
-  function copyUssd(type){
-    const code = type==='mtn'
-      ? '*126*1*1*682470908*'+currentAmount+'#'
-      : '#150*1*1*695956018*'+currentAmount+'#';
-    navigator.clipboard.writeText(code).then(()=>showToast('✅ Code USSD copié !'));
-  }
-
-  function showToast(msg){
-    const t=document.getElementById('toast');
-    t.textContent=msg; t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),2500);
-  }
-
-  function toggleFaq(el){
-    const item = el.parentElement;
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
-    if(!isOpen) item.classList.add('open');
-  }
-</script>
+<script src="assets/script.js"></script>
 </body>
 </html>
