@@ -1,253 +1,1623 @@
-const API = "/api";
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>APPLE STAR - Boutique Premium à Bertoua</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --black: #000000;
+            --dark: #0a0a0a;
+            --blue: #0057FF;
+            --blue-glow: #0057FF55;
+            --white: #ffffff;
+            --gray: #f8f9fa;
+            --gray-dark: #1a1a1a;
+            --text: #1a1a1a;
+            --text-light: #6b7280;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            --shadow-dark: 0 20px 60px rgba(0, 0, 0, 0.3);
+            --radius: 20px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --bg: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: rgba(0, 0, 0, 0.05);
+            --header-bg: rgba(255, 255, 255, 0.85);
+        }
 
-function formatPrice(n) {
-  return new Intl.NumberFormat("fr-FR").format(n) + " FCFA";
-}
+        /* ===== DARK MODE ===== */
+        [data-theme="dark"] {
+            --bg: #0a0a0a;
+            --bg-secondary: #141414;
+            --card-bg: #1a1a1a;
+            --text: #f0f0f0;
+            --text-light: #a0a0a0;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --header-bg: rgba(10, 10, 10, 0.92);
+            --gray: #141414;
+        }
+        [data-theme="dark"] .product-card,
+        [data-theme="dark"] .accessory-card,
+        [data-theme="dark"] .service-card,
+        [data-theme="dark"] .testimonial-card {
+            background: var(--card-bg);
+            border-color: var(--border-color);
+        }
+        [data-theme="dark"] .hero {
+            background: linear-gradient(135deg, #0a0a0a 0%, #141414 100%);
+        }
+        [data-theme="dark"] .bg-marquee {
+            opacity: 0.02;
+        }
+        [data-theme="dark"] .filter-btn {
+            background: var(--card-bg);
+            color: var(--text);
+            border-color: var(--border-color);
+        }
+        [data-theme="dark"] .filter-btn.active {
+            background: var(--blue);
+            color: white;
+        }
+        [data-theme="dark"] header {
+            background: var(--header-bg);
+            border-bottom-color: var(--border-color);
+        }
+        [data-theme="dark"] .cart-sidebar {
+            background: var(--card-bg);
+        }
+        [data-theme="dark"] .cart-item {
+            border-bottom-color: var(--border-color);
+        }
 
-async function api(path, opts = {}) {
-  const res = await fetch(`${API}${path}`, {
-    headers: { "Content-Type": "application/json" },
-    ...opts,
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || "Erreur serveur");
-  return data;
-}
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
 
-const loginScreen = document.querySelector("#admin-login");
-const dashboard = document.querySelector("#admin-dashboard");
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--blue);
+            border-radius: 10px;
+        }
 
-async function checkAuth() {
-  try {
-    const { authenticated } = await api("/admin/me");
-    if (authenticated) {
-      loginScreen.style.display = "none";
-      dashboard.style.display = "block";
-      initDashboard();
-    } else {
-      loginScreen.style.display = "flex";
-      dashboard.style.display = "none";
-    }
-  } catch (e) {
-    loginScreen.style.display = "flex";
-  }
-}
+        /* ===== BACKGROUND MARQUEE ===== */
+        .bg-marquee {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.03;
+            font-size: 120px;
+            font-weight: 900;
+            color: var(--black);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            user-select: none;
+            animation: marqueeScroll 40s linear infinite;
+        }
+        @keyframes marqueeScroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        .bg-marquee span {
+            display: inline-block;
+            padding-right: 200px;
+        }
 
-document.querySelector("#login-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const note = document.querySelector("#login-form .form-note");
-  const password = document.querySelector("#login-password").value;
-  try {
-    await api("/admin/login", { method: "POST", body: JSON.stringify({ password }) });
-    note.style.color = "#15813F";
-    note.textContent = "Connexion réussie.";
-    checkAuth();
-  } catch (err) {
-    note.style.color = "#E0502F";
-    note.textContent = err.message;
-  }
-});
+        /* ===== HEADER / NAVBAR ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 16px 0;
+            background: var(--header-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        header.scrolled {
+            padding: 10px 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
+        }
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-logo span {
+            color: var(--blue);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+        .nav-links a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            transition: var(--transition);
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--blue);
+            transition: var(--transition);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .nav-links a:hover {
+            color: var(--blue);
+        }
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-icons i {
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text);
+        }
+        .nav-icons i:hover {
+            color: var(--blue);
+            transform: scale(1.1);
+        }
+        .cart-badge {
+            background: var(--blue);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            position: relative;
+            top: -10px;
+            right: 8px;
+        }
+        .menu-toggle {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text);
+            transition: var(--transition);
+        }
+        .theme-toggle:hover {
+            color: var(--blue);
+            transform: rotate(20deg);
+        }
 
-document.querySelector("#logout-btn").addEventListener("click", async () => {
-  await api("/admin/logout", { method: "POST" });
-  checkAuth();
-});
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7ec 100%);
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--blue-glow), transparent 70%);
+            border-radius: 50%;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+        }
+        .hero-content h1 {
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 16px;
+        }
+        .hero-content h1 span {
+            color: var(--blue);
+            text-shadow: 0 0 40px var(--blue-glow);
+        }
+        .hero-content p {
+            font-size: 20px;
+            color: var(--text-light);
+            max-width: 480px;
+            margin-bottom: 36px;
+            font-weight: 400;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: var(--blue);
+            color: white;
+            box-shadow: 0 8px 30px var(--blue-glow);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px var(--blue-glow);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--text);
+        }
+        .btn-outline:hover {
+            background: var(--text);
+            color: var(--bg);
+            transform: translateY(-3px);
+        }
+        .btn-success {
+            background: #10B981;
+            color: white;
+        }
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px #10B98155;
+        }
+        .btn-orange {
+            background: #FF7A00;
+            color: white;
+        }
+        .btn-orange:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px #FF7A0055;
+        }
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        .btn-whatsapp:hover {
+            background: #1da85a;
+            transform: translateY(-2px);
+        }
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 30px 80px rgba(0, 0, 0, 0.15));
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
 
-// ---------- dashboard ----------
-let dashboardReady = false;
+        /* ===== SECTION TITLES ===== */
+        .section {
+            padding: 80px 0;
+            position: relative;
+            z-index: 1;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .section-header h2 {
+            font-size: 44px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        .section-header h2 span {
+            color: var(--blue);
+        }
+        .section-header p {
+            color: var(--text-light);
+            font-size: 18px;
+            margin-top: 8px;
+        }
 
-function initDashboard() {
-  loadStats();
-  loadOrders();
-  loadProducts();
-  if (dashboardReady) return;
-  dashboardReady = true;
+        /* ===== FILTERS ===== */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .filter-btn {
+            padding: 10px 28px;
+            border-radius: 40px;
+            border: 1px solid #ddd;
+            background: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            color: var(--text);
+        }
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+            box-shadow: 0 4px 20px var(--blue-glow);
+        }
 
-  document.querySelectorAll(".admin-tab").forEach((tab) => {
-    tab.addEventListener("click", () => {
-      document.querySelectorAll(".admin-tab").forEach((t) => t.classList.remove("active"));
-      document.querySelectorAll(".admin-panel").forEach((p) => p.classList.remove("active"));
-      tab.classList.add("active");
-      document.querySelector(`#panel-${tab.dataset.tab}`).classList.add("active");
-    });
-  });
+        /* ===== PRODUCT GRID ===== */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 30px;
+        }
+        .product-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px 20px 28px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 87, 255, 0.10);
+            border-color: var(--blue);
+        }
+        .product-card .favorite {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 20px;
+            color: #ddd;
+            cursor: pointer;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(6px);
+            padding: 8px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-card .favorite.active {
+            color: #ff3b30;
+        }
+        .product-card .favorite:hover {
+            transform: scale(1.2);
+        }
+        .product-card .product-img {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .product-card .product-img i {
+            font-size: 80px;
+            color: var(--text);
+            opacity: 0.15;
+        }
+        .product-card h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .product-card .brand-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--blue);
+            background: var(--blue-glow);
+            padding: 2px 14px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+        .product-card .price {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            margin: 8px 0 16px;
+        }
+        .product-card .price small {
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .product-actions .btn {
+            padding: 10px 20px;
+            font-size: 13px;
+            flex: 1;
+            justify-content: center;
+            min-width: 100px;
+        }
 
-  document.querySelector("#refresh-orders").addEventListener("click", () => { loadOrders(); loadStats(); });
-  document.querySelector("#add-product-btn").addEventListener("click", () => openProductModal());
-  document.querySelector("#product-modal-close").addEventListener("click", closeProductModal);
-  document.querySelector("#product-modal").addEventListener("click", (e) => {
-    if (e.target.id === "product-modal") closeProductModal();
-  });
-  document.querySelector("#product-form").addEventListener("submit", onProductFormSubmit);
-}
+        /* ===== ACCESSORIES ===== */
+        .accessory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 24px;
+        }
+        .accessory-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        .accessory-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--blue);
+        }
+        .accessory-card i {
+            font-size: 48px;
+            color: var(--blue);
+            opacity: 0.7;
+            margin-bottom: 12px;
+        }
+        .accessory-card h4 {
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .accessory-card .price {
+            font-weight: 700;
+            font-size: 16px;
+            margin: 6px 0 12px;
+        }
 
-async function loadStats() {
-  try {
-    const s = await api("/stats");
-    document.querySelector("#stat-orders").textContent = s.total_orders;
-    document.querySelector("#stat-new").textContent = s.new_orders;
-    document.querySelector("#stat-products").textContent = s.total_products;
-  } catch (e) {}
-}
+        /* ===== SERVICES ===== */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        .service-card {
+            background: var(--card-bg);
+            padding: 32px 24px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        .service-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--blue);
+            box-shadow: 0 20px 60px var(--blue-glow);
+        }
+        .service-card i {
+            font-size: 40px;
+            color: var(--blue);
+            margin-bottom: 16px;
+        }
+        .service-card h4 {
+            font-size: 17px;
+            font-weight: 600;
+        }
 
-// ---------- orders ----------
-async function loadOrders() {
-  const wrap = document.querySelector("#orders-table-wrap");
-  wrap.innerHTML = "<p>Chargement…</p>";
-  try {
-    const { orders } = await api("/orders");
-    if (!orders.length) {
-      wrap.innerHTML = `<div class="empty-state">Aucune commande pour le moment. Les commandes passées depuis le site apparaîtront ici.</div>`;
-      return;
-    }
-    wrap.innerHTML = `
-      <table class="admin-table">
-        <thead><tr><th>#</th><th>Client</th><th>Téléphone</th><th>Produit</th><th>Prix</th><th>Statut</th><th>Date</th><th></th></tr></thead>
-        <tbody>
-          ${orders.map(orderRowHTML).join("")}
-        </tbody>
-      </table>`;
-    wrap.querySelectorAll("select.admin-select").forEach((sel) => {
-      sel.addEventListener("change", async () => {
-        await api(`/orders/${sel.dataset.id}`, { method: "PATCH", body: JSON.stringify({ status: sel.value }) });
-        loadStats();
-      });
-    });
-    wrap.querySelectorAll(".delete-order").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        if (!confirm("Supprimer cette commande ?")) return;
-        await api(`/orders/${btn.dataset.id}`, { method: "DELETE" });
-        loadOrders();
-        loadStats();
-      });
-    });
-  } catch (e) {
-    wrap.innerHTML = `<div class="empty-state">Impossible de charger les commandes.</div>`;
-  }
-}
+        /* ===== TESTIMONIALS ===== */
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 30px;
+        }
+        .testimonial-card {
+            background: var(--card-bg);
+            padding: 28px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+        .testimonial-card .stars {
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+        .testimonial-card p {
+            font-style: italic;
+            color: var(--text-light);
+        }
+        .testimonial-card .author {
+            font-weight: 600;
+            margin-top: 12px;
+        }
 
-function orderRowHTML(o) {
-  const statuses = ["nouveau", "confirmé", "livré", "annulé"];
-  return `
-    <tr>
-      <td>#${o.id}</td>
-      <td>${escapeHTML(o.customer_name)}</td>
-      <td>${escapeHTML(o.phone)}</td>
-      <td>${escapeHTML(o.product_name)}</td>
-      <td>${o.price ? formatPrice(o.price) : "—"}</td>
-      <td>
-        <select class="admin-select status-${o.status}" data-id="${o.id}">
-          ${statuses.map((s) => `<option value="${s}" ${s === o.status ? "selected" : ""}>${s}</option>`).join("")}
-        </select>
-      </td>
-      <td>${o.created_at}</td>
-      <td><button class="icon-btn delete-order" data-id="${o.id}" title="Supprimer">🗑️</button></td>
-    </tr>`;
-}
+        /* ===== ABOUT & CONTACT ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .about-grid h2 {
+            font-size: 40px;
+            font-weight: 800;
+        }
+        .about-grid p {
+            color: var(--text-light);
+            font-size: 18px;
+            line-height: 1.8;
+        }
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .contact-info .item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 18px;
+        }
+        .contact-info .item i {
+            width: 44px;
+            height: 44px;
+            background: var(--blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .map-container {
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 320px;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
 
-// ---------- products ----------
-let productsCache = [];
+        /* ===== PAYMENT SECTION ===== */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 24px;
+        }
+        .payment-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            border: 2px solid var(--border-color);
+            transition: var(--transition);
+            text-align: center;
+        }
+        .payment-card:hover {
+            border-color: var(--blue);
+            transform: translateY(-4px);
+        }
+        .payment-card .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .payment-card .number {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text);
+        }
+        .payment-card .label {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .payment-card .copy-btn {
+            margin-top: 12px;
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text);
+            font-size: 13px;
+        }
+        .payment-card .copy-btn:hover {
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+        }
 
-async function loadProducts() {
-  const wrap = document.querySelector("#products-table-wrap");
-  wrap.innerHTML = "<p>Chargement…</p>";
-  try {
-    const { products } = await api("/products");
-    productsCache = products;
-    if (!products.length) {
-      wrap.innerHTML = `<div class="empty-state">Aucun produit. Ajoutez votre premier article.</div>`;
-      return;
-    }
-    wrap.innerHTML = `
-      <table class="admin-table">
-        <thead><tr><th>Nom</th><th>Catégorie</th><th>Prix</th><th>Vedette</th><th></th></tr></thead>
-        <tbody>
-          ${products.map(productRowHTML).join("")}
-        </tbody>
-      </table>`;
-    wrap.querySelectorAll(".edit-product").forEach((btn) => {
-      btn.addEventListener("click", () => openProductModal(productsCache.find((p) => p.id == btn.dataset.id)));
-    });
-    wrap.querySelectorAll(".delete-product").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        if (!confirm("Supprimer ce produit du catalogue ?")) return;
-        await api(`/products/${btn.dataset.id}`, { method: "DELETE" });
-        loadProducts();
-        loadStats();
-      });
-    });
-  } catch (e) {
-    wrap.innerHTML = `<div class="empty-state">Impossible de charger le catalogue.</div>`;
-  }
-}
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--dark);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 48px 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+        footer .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 32px;
+        }
+        footer .logo {
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+        }
+        footer .logo span {
+            color: var(--blue);
+        }
+        footer .socials {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        footer .socials a {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            color: white;
+            font-size: 18px;
+        }
+        footer .socials a:hover {
+            background: var(--blue);
+            transform: translateY(-3px);
+        }
+        footer h4 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        footer ul {
+            list-style: none;
+        }
+        footer ul li {
+            margin-bottom: 8px;
+        }
+        footer ul li a:hover {
+            color: white;
+        }
+        footer .bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 24px;
+            text-align: center;
+            font-size: 14px;
+        }
 
-const CAT_LABELS = { iphone: "iPhone", samsung: "Samsung", local: "Tecno / Infinix", accessoires: "Accessoires" };
+        /* ===== BACK TO TOP ===== */
+        .back-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 52px;
+            height: 52px;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 8px 30px var(--blue-glow);
+            transition: var(--transition);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.8);
+        }
+        .back-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+        .back-top:hover {
+            transform: scale(1.1) translateY(-4px);
+        }
 
-function productRowHTML(p) {
-  return `
-    <tr>
-      <td>${escapeHTML(p.name)}</td>
-      <td>${CAT_LABELS[p.category] || p.category}</td>
-      <td>${formatPrice(p.price)}</td>
-      <td>${p.featured ? "★ Oui" : "—"}</td>
-      <td>
-        <button class="icon-btn edit-product" data-id="${p.id}" title="Modifier">✏️</button>
-        <button class="icon-btn delete-product" data-id="${p.id}" title="Supprimer">🗑️</button>
-      </td>
-    </tr>`;
-}
+        /* ===== CART SIDEBAR ===== */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+        .cart-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 400px;
+            height: 100%;
+            background: var(--card-bg);
+            z-index: 2001;
+            padding: 32px 24px;
+            transition: var(--transition);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        .cart-sidebar.open {
+            right: 0;
+        }
+        .cart-sidebar h2 {
+            font-size: 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-sidebar .close-cart {
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .cart-item .qty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cart-item .qty button {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: var(--bg);
+            cursor: pointer;
+            color: var(--text);
+        }
+        .cart-total {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 24px 0;
+        }
+        .cart-checkout {
+            width: 100%;
+            padding: 16px;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 10px;
+        }
+        .cart-checkout:hover {
+            background: #0044cc;
+        }
+        .cart-checkout-whatsapp {
+            width: 100%;
+            padding: 16px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .cart-checkout-whatsapp:hover {
+            background: #1da85a;
+        }
 
-function openProductModal(product = null) {
-  const modal = document.querySelector("#product-modal");
-  const form = document.querySelector("#product-form");
-  form.querySelector(".form-note").textContent = "";
-  document.querySelector("#product-modal-title").textContent = product ? "Modifier le produit" : "Ajouter un produit";
-  document.querySelector("#product-modal-eyebrow").textContent = product ? "Modification" : "Nouveau produit";
-  document.querySelector("#pf-id").value = product ? product.id : "";
-  document.querySelector("#pf-name").value = product ? product.name : "";
-  document.querySelector("#pf-category").value = product ? product.category : "iphone";
-  document.querySelector("#pf-price").value = product ? product.price : "";
-  document.querySelector("#pf-badge").value = product ? product.badge || "" : "";
-  document.querySelector("#pf-specs").value = product ? product.specs || "" : "";
-  document.querySelector("#pf-color").value = product ? product.color || "ph-1" : "ph-1";
-  document.querySelector("#pf-featured").checked = product ? !!product.featured : false;
-  modal.classList.add("show");
-}
+        /* ===== TOAST NOTIFICATION ===== */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            right: 40px;
+            background: var(--card-bg);
+            color: var(--text);
+            padding: 16px 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--blue);
+            z-index: 3000;
+            transform: translateX(120%);
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            max-width: 380px;
+            font-weight: 500;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+        .toast i {
+            color: var(--blue);
+            margin-right: 10px;
+        }
 
-function closeProductModal() {
-  document.querySelector("#product-modal").classList.remove("show");
-}
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-content p {
+                margin: 0 auto 36px;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            footer .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                background: var(--card-bg);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 24px;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+                gap: 16px;
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .hero-content h1 {
+                font-size: 44px;
+            }
+            .section-header h2 {
+                font-size: 32px;
+            }
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            footer .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .product-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-content h1 {
+                font-size: 34px;
+            }
+            .btn {
+                padding: 14px 24px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
 
-async function onProductFormSubmit(e) {
-  e.preventDefault();
-  const note = document.querySelector("#product-form .form-note");
-  const id = document.querySelector("#pf-id").value;
-  const payload = {
-    name: document.querySelector("#pf-name").value.trim(),
-    category: document.querySelector("#pf-category").value,
-    price: Number(document.querySelector("#pf-price").value),
-    badge: document.querySelector("#pf-badge").value,
-    specs: document.querySelector("#pf-specs").value.trim(),
-    color: document.querySelector("#pf-color").value,
-    featured: document.querySelector("#pf-featured").checked,
-  };
-  try {
-    if (id) {
-      await api(`/products/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
-    } else {
-      await api("/products", { method: "POST", body: JSON.stringify(payload) });
-    }
-    closeProductModal();
-    loadProducts();
-    loadStats();
-  } catch (err) {
-    note.style.color = "#E0502F";
-    note.textContent = err.message;
-  }
-}
+    <!-- ===== BACKGROUND MARQUEE ===== -->
+    <div class="bg-marquee">
+        <span>APPLE STAR ✦ APPLE STAR ✦ APPLE STAR ✦ APPLE STAR ✦</span>
+        <span>APPLE STAR ✦ APPLE STAR ✦ APPLE STAR ✦ APPLE STAR ✦</span>
+    </div>
 
-function escapeHTML(str) {
-  return String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-}
+    <!-- ===== HEADER ===== -->
+    <header id="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="nav-logo">
+                    <i class="fas fa-apple" style="color:var(--blue);"></i>
+                    APPLE<span>STAR</span>
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home">Accueil</a></li>
+                    <li><a href="#products">Téléphones</a></li>
+                    <li><a href="#accessories">Accessoires</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#about">À propos</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="nav-icons">
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Changer de thème">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                    </button>
+                    <i class="fas fa-search" onclick="alert('🔍 Recherche ouverte')"></i>
+                    <i class="fas fa-heart" onclick="alert('❤️ Vos favoris : ' + favorites.size + ' produits')"></i>
+                    <i class="fas fa-shopping-bag" onclick="toggleCart()"></i>
+                    <span class="cart-badge" id="cartCount">0</span>
+                    <div class="menu-toggle" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-checkAuth();
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <h1>APPLE <span>STAR</span></h1>
+                <p>Votre boutique de smartphones, tablettes et accessoires à Bertoua. Livraison rapide et service professionnel.</p>
+                <div class="hero-buttons">
+                    <a href="#products" class="btn btn-primary">
+                        <i class="fas fa-shopping-bag"></i> Commander maintenant
+                    </a>
+                    <a href="#contact" class="btn btn-outline">
+                        <i class="fas fa-headset"></i> Nous contacter
+                    </a>
+                </div>
+                <div style="margin-top:32px;display:flex;gap:32px;flex-wrap:wrap;justify-content:center;">
+                    <div><strong style="font-size:28px;color:var(--blue);">150+</strong><br><span style="color:var(--text-light);font-size:14px;">Produits vendus</span></div>
+                    <div><strong style="font-size:28px;color:var(--blue);">98%</strong><br><span style="color:var(--text-light);font-size:14px;">Clients satisfaits</span></div>
+                    <div><strong style="font-size:28px;color:var(--blue);">24/7</strong><br><span style="color:var(--text-light);font-size:14px;">Support WhatsApp</span></div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://placehold.co/500x500/0a0a0a/0057FF?text=APPLE+STAR" alt="APPLE STAR Smartphones" />
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PRODUCTS ===== -->
+    <section class="section" id="products">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nos <span>Téléphones</span></h2>
+                <p>Les meilleurs smartphones premium au Cameroun</p>
+            </div>
+            <div class="filters" id="filterContainer">
+                <button class="filter-btn active" data-brand="all">Tous</button>
+                <button class="filter-btn" data-brand="iPhone">iPhone</button>
+                <button class="filter-btn" data-brand="Samsung">Samsung</button>
+                <button class="filter-btn" data-brand="Xiaomi">Xiaomi</button>
+                <button class="filter-btn" data-brand="Tecno">Tecno</button>
+                <button class="filter-btn" data-brand="Infinix">Infinix</button>
+            </div>
+            <div class="product-grid" id="productGrid"></div>
+        </div>
+    </section>
+
+    <!-- ===== ACCESSORIES ===== -->
+    <section class="section" id="accessories" style="background:var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nos <span>Accessoires</span></h2>
+                <p>Complétez votre expérience Apple</p>
+            </div>
+            <div class="accessory-grid" id="accessoryGrid"></div>
+        </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section class="section" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nos <span>Services</span></h2>
+                <p>Une expérience client exceptionnelle</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card"><i class="fas fa-mobile-alt"></i><h4>Vente de smartphones</h4></div>
+                <div class="service-card"><i class="fas fa-headphones"></i><h4>Vente d'accessoires</h4></div>
+                <div class="service-card"><i class="fas fa-truck"></i><h4>Livraison rapide</h4></div>
+                <div class="service-card"><i class="fas fa-user-tie"></i><h4>Conseils personnalisés</h4></div>
+                <div class="service-card"><i class="fab fa-whatsapp"></i><h4>Support WhatsApp 24h/24</h4></div>
+                <div class="service-card"><i class="fas fa-shield-alt"></i><h4>Garantie sur plusieurs produits</h4></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <section class="section" style="background:var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Avis <span>Clients</span></h2>
+                <p>Ce que disent nos clients de APPLE STAR</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"Le meilleur rapport qualité-prix à Bertoua ! Livraison super rapide, je recommande."</p>
+                    <div class="author">— Jean M.</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"Service client incroyable, ils m'ont conseillé le téléphone parfait pour mon budget."</p>
+                    <div class="author">— Sarah K.</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"iPhone 16 Pro Max reçu en moins de 24h. Produit authentique, emballage parfait."</p>
+                    <div class="author">— David T.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="section" id="about">
+        <div class="container about-grid">
+            <div>
+                <h2>À propos d'<span style="color:var(--blue);">APPLE STAR</span></h2>
+                <p style="margin-top:16px;">APPLE STAR est une boutique spécialisée dans la vente de smartphones et accessoires à Bertoua, Cameroun. Nous proposons des appareils de qualité avec un service de livraison rapide et sécurisé. Notre engagement : l'excellence, la transparence et la satisfaction totale de nos clients.</p>
+                <div style="display:flex;gap:24px;margin-top:24px;flex-wrap:wrap;">
+                    <div><i class="fas fa-check-circle" style="color:var(--blue);"></i> Produits 100% authentiques</div>
+                    <div><i class="fas fa-check-circle" style="color:var(--blue);"></i> Prix compétitifs</div>
+                    <div><i class="fas fa-check-circle" style="color:var(--blue);"></i> Service après-vente</div>
+                </div>
+            </div>
+            <div>
+                <img src="https://placehold.co/600x400/0a0a0a/0057FF?text=APPLE+STAR+Store" alt="APPLE STAR Boutique" style="border-radius:var(--radius);box-shadow:var(--shadow);" />
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT & PAYMENT ===== -->
+    <section class="section" id="contact" style="background:var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nous <span>Contacter</span></h2>
+                <p>Disponibles 24h/24 sur WhatsApp & Mobile Money</p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+                <div>
+                    <div class="contact-info">
+                        <div class="item"><i class="fas fa-store"></i> <span><strong>APPLE STAR</strong> — Bertoua, Cameroun</span></div>
+                        <div class="item"><i class="fas fa-map-marker-alt"></i> <span>Bertoua, Région de l'Est, Cameroun</span></div>
+                        <div class="item"><i class="fab fa-whatsapp"></i> <span><a href="https://wa.me/237695956018" target="_blank" style="color:var(--blue);font-weight:600;">+237 695 956 018</a></span></div>
+                        <div class="item"><i class="fas fa-envelope"></i> <span>contact@applestar.cm</span></div>
+                    </div>
+                    <div style="margin-top:24px;">
+                        <a href="https://wa.me/237695956018" target="_blank" class="btn btn-primary" style="width:100%;justify-content:center;">
+                            <i class="fab fa-whatsapp"></i> Nous écrire sur WhatsApp
+                        </a>
+                    </div>
+
+                    <!-- ===== PAYMENT METHODS ===== -->
+                    <div style="margin-top:32px;">
+                        <h3 style="font-size:22px;font-weight:700;margin-bottom:16px;">
+                            <i class="fas fa-credit-card" style="color:var(--blue);"></i> Paiement Mobile Money
+                        </h3>
+                        <div class="payment-methods">
+                            <div class="payment-card">
+                                <div class="icon">🟧</div>
+                                <div class="label">Orange Money</div>
+                                <div class="number" id="orangeNumber">695 956 018</div>
+                                <button class="copy-btn" onclick="copyNumber('695956018', 'Orange Money')">
+                                    <i class="fas fa-copy"></i> Copier
+                                </button>
+                            </div>
+                            <div class="payment-card">
+                                <div class="icon">🟨</div>
+                                <div class="label">MTN Mobile Money</div>
+                                <div class="number" id="mtnNumber">682 470 908</div>
+                                <button class="copy-btn" onclick="copyNumber('682470908', 'MTN Mobile Money')">
+                                    <i class="fas fa-copy"></i> Copier
+                                </button>
+                            </div>
+                        </div>
+                        <p style="color:var(--text-light);font-size:14px;margin-top:12px;text-align:center;">
+                            <i class="fas fa-info-circle"></i> Après paiement, envoyez votre reçu sur WhatsApp pour validation
+                        </p>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127060.48071489307!2d13.66947944233731!3d4.579667343743332!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1140d5b8c4e3e0d3%3A0x4b6b0b0b0b0b0b0b!2sBertoua%2C%20Cameroun!5e0!3m2!1sfr!2sfr!4v1700000000000" allowfullscreen loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo">APPLE<span>STAR</span></div>
+                    <p style="margin:12px 0;max-width:300px;">Téléphones • Accessoires • Livraison Rapide</p>
+                    <p><i class="fab fa-whatsapp" style="color:#25D366;"></i> +237 695 956 018</p>
+                    <div class="socials">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://wa.me/237695956018" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4>Liens rapides</h4>
+                    <ul>
+                        <li><a href="#home">Accueil</a></li>
+                        <li><a href="#products">Téléphones</a></li>
+                        <li><a href="#accessories">Accessoires</a></li>
+                        <li><a href="#services">Services</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Livraison</a></li>
+                        <li><a href="#">Garantie</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bottom">
+                APPLE STAR © 2026 — Tous droits réservés. Boutique premium à Bertoua, Cameroun.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== BACK TO TOP ===== -->
+    <button class="back-top" id="backTop" aria-label="Retour en haut">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- ===== CART SIDEBAR ===== -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <h2>
+            🛒 Mon panier
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </h2>
+        <div id="cartItems"></div>
+        <div class="cart-total" id="cartTotal">Total: 0 FCFA</div>
+        <button class="cart-checkout" onclick="checkout()">
+            <i class="fas fa-credit-card"></i> Payer par Mobile Money
+        </button>
+        <button class="cart-checkout-whatsapp" onclick="checkoutWhatsApp()">
+            <i class="fab fa-whatsapp"></i> Commander via WhatsApp
+        </button>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Copié !</span>
+    </div>
+
+    <script>
+        // ======================================================
+        // 1. DATA
+        // ======================================================
+        const products = [
+            { id: 1, name: 'iPhone 16 Pro Max', brand: 'iPhone', price: 1250000, img: '📱' },
+            { id: 2, name: 'iPhone 16 Pro', brand: 'iPhone', price: 1050000, img: '📱' },
+            { id: 3, name: 'iPhone 15 Pro Max', brand: 'iPhone', price: 900000, img: '📱' },
+            { id: 4, name: 'iPhone 15 Pro', brand: 'iPhone', price: 800000, img: '📱' },
+            { id: 5, name: 'iPhone 14 Pro Max', brand: 'iPhone', price: 700000, img: '📱' },
+            { id: 6, name: 'iPhone 13 Pro Max', brand: 'iPhone', price: 550000, img: '📱' },
+            { id: 7, name: 'iPhone 13', brand: 'iPhone', price: 420000, img: '📱' },
+            { id: 8, name: 'Samsung Galaxy S25 Ultra', brand: 'Samsung', price: 1100000, img: '📱' },
+            { id: 9, name: 'Samsung Galaxy S25+', brand: 'Samsung', price: 900000, img: '📱' },
+            { id: 10, name: 'Samsung Galaxy A56', brand: 'Samsung', price: 350000, img: '📱' },
+            { id: 11, name: 'Samsung Galaxy A36', brand: 'Samsung', price: 280000, img: '📱' },
+            { id: 12, name: 'Xiaomi 15 Ultra', brand: 'Xiaomi', price: 850000, img: '📱' },
+            { id: 13, name: 'Redmi Note 14 Pro', brand: 'Xiaomi', price: 280000, img: '📱' },
+            { id: 14, name: 'Poco X7 Pro', brand: 'Xiaomi', price: 350000, img: '📱' },
+            { id: 15, name: 'Tecno Phantom V Fold', brand: 'Tecno', price: 700000, img: '📱' },
+            { id: 16, name: 'Tecno Camon 40 Premier', brand: 'Tecno', price: 320000, img: '📱' },
+            { id: 17, name: 'Tecno Spark 30 Pro', brand: 'Tecno', price: 170000, img: '📱' },
+            { id: 18, name: 'Infinix Zero 40', brand: 'Infinix', price: 250000, img: '📱' },
+            { id: 19, name: 'Infinix Note 50 Pro', brand: 'Infinix', price: 220000, img: '📱' },
+            { id: 20, name: 'Infinix Smart 9', brand: 'Infinix', price: 110000, img: '📱' },
+        ];
+
+        const accessories = [
+            { name: 'AirPods Pro', price: 120000, icon: '🎧' },
+            { name: 'Apple Watch', price: 250000, icon: '⌚' },
+            { name: 'Chargeurs rapides', price: 15000, icon: '🔌' },
+            { name: 'Coques premium', price: 8000, icon: '📱' },
+            { name: 'Écouteurs Bluetooth', price: 25000, icon: '🎧' },
+            { name: 'Power Bank', price: 35000, icon: '🔋' },
+            { name: 'Verres trempés', price: 5000, icon: '🛡️' },
+        ];
+
+        // ======================================================
+        // 2. STATE
+        // ======================================================
+        let cart = [];
+        let favorites = new Set();
+        let currentTheme = localStorage.getItem('theme') || 'light';
+
+        // ======================================================
+        // 3. THEME
+        // ======================================================
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            const icon = document.getElementById('themeIcon');
+            icon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        function initTheme() {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            const icon = document.getElementById('themeIcon');
+            icon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        // ======================================================
+        // 4. TOAST
+        // ======================================================
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // ======================================================
+        // 5. COPY NUMBER
+        // ======================================================
+        function copyNumber(number, label) {
+            navigator.clipboard.writeText(number).then(() => {
+                showToast(`✅ ${label} : ${number} copié !`);
+            }).catch(() => {
+                // Fallback
+                const input = document.createElement('input');
+                input.value = number;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                showToast(`✅ ${label} : ${number} copié !`);
+            });
+        }
+
+        // ======================================================
+        // 6. RENDER PRODUCTS
+        // ======================================================
+        function renderProducts(filter = 'all') {
+            const grid = document.getElementById('productGrid');
+            const filtered = filter === 'all' ? products : products.filter(p => p.brand === filter);
+            grid.innerHTML = filtered.map(p => `
+                    <div class="product-card" data-id="${p.id}">
+                        <div class="favorite ${favorites.has(p.id) ? 'active' : ''}" onclick="toggleFavorite(${p.id})">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="product-img">
+                            <span style="font-size:72px;">${p.img}</span>
+                        </div>
+                        <span class="brand-tag">${p.brand}</span>
+                        <h3>${p.name}</h3>
+                        <div class="price">${p.price.toLocaleString()} <small>FCFA</small></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary" onclick="addToCart(${p.id})">
+                                <i class="fas fa-shopping-bag"></i> Commander
+                            </button>
+                            <button class="btn btn-whatsapp" onclick="whatsappOrder('${p.name}', ${p.price})">
+                                <i class="fab fa-whatsapp"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        // ======================================================
+        // 7. FILTERS
+        // ======================================================
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderProducts(this.dataset.brand);
+            });
+        });
+
+        // ======================================================
+        // 8. FAVORITES
+        // ======================================================
+        function toggleFavorite(id) {
+            if (favorites.has(id)) favorites.delete(id);
+            else favorites.add(id);
+            renderProducts(document.querySelector('.filter-btn.active')?.dataset.brand || 'all');
+        }
+
+        // ======================================================
+        // 9. CART
+        // ======================================================
+        function addToCart(id) {
+            const p = products.find(prod => prod.id === id);
+            if (!p) return;
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...p, qty: 1 });
+            }
+            updateCartUI();
+            showToast(`✅ ${p.name} ajouté au panier`);
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartUI();
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) {
+                removeFromCart(id);
+                return;
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const count = cart.reduce((sum, i) => sum + i.qty, 0);
+            document.getElementById('cartCount').textContent = count;
+
+            const container = document.getElementById('cartItems');
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:40px 0;">Votre panier est vide.</p>';
+                document.getElementById('cartTotal').textContent = 'Total: 0 FCFA';
+                return;
+            }
+            container.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.name}</strong>
+                            <div>${item.price.toLocaleString()} FCFA</div>
+                        </div>
+                        <div class="qty">
+                            <button onclick="changeQty(${item.id}, -1)">−</button>
+                            <span>${item.qty}</span>
+                            <button onclick="changeQty(${item.id}, 1)">+</button>
+                            <button onclick="removeFromCart(${item.id})" style="background:none;border:none;color:#ff3b30;font-size:18px;">✕</button>
+                        </div>
+                    </div>
+                `).join('');
+
+            const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+            document.getElementById('cartTotal').textContent = `Total: ${total.toLocaleString()} FCFA`;
+        }
+
+        function toggleCart() {
+            document.getElementById('cartOverlay').classList.toggle('open');
+            document.getElementById('cartSidebar').classList.toggle('open');
+        }
+
+        // ======================================================
+        // 10. CHECKOUT
+        // ======================================================
+        function getCartMessage() {
+            if (cart.length === 0) return null;
+            const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+            const items = cart.map(i =>
+                `• ${i.name} x${i.qty} = ${(i.price * i.qty).toLocaleString()} FCFA`
+            ).join('%0A');
+            return {
+                message: `Bonjour APPLE STAR, je souhaite commander ces articles :%0A${items}%0A%0ATotal : ${total.toLocaleString()} FCFA%0A%0AMéthode de paiement : `,
+                total: total
+            };
+        }
+
+        function checkout() {
+            const data = getCartMessage();
+            if (!data) return alert('Votre panier est vide.');
+            const choice = confirm(
+                `💰 Total : ${data.total.toLocaleString()} FCFA\n\nChoisissez votre méthode de paiement :\n• OK → Paiement Mobile Money\n• Annuler → WhatsApp`
+            );
+            if (choice) {
+                // Mobile Money
+                const method = confirm(
+                    `Choisissez votre opérateur :\n• OK → Orange Money (695 956 018)\n• Annuler → MTN Mobile Money (682 470 908)`
+                );
+                const number = method ? '695956018' : '682470908';
+                const operator = method ? 'Orange Money' : 'MTN Mobile Money';
+                alert(
+                    `📱 Paiement ${operator}\nNuméro : ${number}\nMontant : ${data.total.toLocaleString()} FCFA\n\n1. Effectuez le transfert\n2. Envoyez le reçu sur WhatsApp\n3. Nous traitons votre commande`
+                );
+                const msg = data.message + `${operator} (${number})`;
+                window.open(`https://wa.me/237695956018?text=${msg}`, '_blank');
+            } else {
+                checkoutWhatsApp();
+            }
+        }
+
+        function checkoutWhatsApp() {
+            const data = getCartMessage();
+            if (!data) return alert('Votre panier est vide.');
+            const msg = data.message + 'WhatsApp';
+            window.open(`https://wa.me/237695956018?text=${msg}`, '_blank');
+        }
+
+        function whatsappOrder(name, price) {
+            const msg =
+                `Bonjour APPLE STAR, je souhaite commander ce téléphone : ${name} (${price.toLocaleString()} FCFA)`;
+            window.open(`https://wa.me/237695956018?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // ======================================================
+        // 11. ACCESSORIES
+        // ======================================================
+        function renderAccessories() {
+            const grid = document.getElementById('accessoryGrid');
+            grid.innerHTML = accessories.map(a => `
+                    <div class="accessory-card">
+                        <div style="font-size:48px;">${a.icon}</div>
+                        <h4>${a.name}</h4>
+                        <div class="price">${a.price.toLocaleString()} FCFA</div>
+                        <button class="btn btn-primary" style="padding:8px 20px;font-size:13px;width:100%;" onclick="whatsappOrder('${a.name}', ${a.price})">
+                            <i class="fab fa-whatsapp"></i> Commander
+                        </button>
+                    </div>
+                `).join('');
+        }
+
+        // ======================================================
+        // 12. BACK TO TOP
+        // ======================================================
+        const backTop = document.getElementById('backTop');
+        window.addEventListener('scroll', () => {
+            backTop.classList.toggle('visible', window.scrollY > 400);
+        });
+        backTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ======================================================
+        // 13. MOBILE MENU
+        // ======================================================
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+
+        // ======================================================
+        // 14. HEADER SHADOW
+        // ======================================================
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ======================================================
+        // 15. INIT
+        // ======================================================
+        initTheme();
+        renderProducts();
+        renderAccessories();
+        updateCartUI();
+
+        console.log('🚀 APPLE STAR — Boutique premium à Bertoua');
+        console.log('📞 WhatsApp: +237695956018');
+        console.log('🟧 Orange Money: 695956018');
+        console.log('🟨 MTN Mobile Money: 682470908');
+    </script>
+
+</body>
+</html>
