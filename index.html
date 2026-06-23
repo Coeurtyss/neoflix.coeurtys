@@ -1,1623 +1,742 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>APPLE STAR - Boutique Premium à Bertoua</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <style>
-        /* ===== RESET & BASE ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        :root {
-            --black: #000000;
-            --dark: #0a0a0a;
-            --blue: #0057FF;
-            --blue-glow: #0057FF55;
-            --white: #ffffff;
-            --gray: #f8f9fa;
-            --gray-dark: #1a1a1a;
-            --text: #1a1a1a;
-            --text-light: #6b7280;
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-            --shadow-dark: 0 20px 60px rgba(0, 0, 0, 0.3);
-            --radius: 20px;
-            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --bg: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --card-bg: #ffffff;
-            --border-color: rgba(0, 0, 0, 0.05);
-            --header-bg: rgba(255, 255, 255, 0.85);
-        }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NEOFLIX — Abonnements Streaming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:#08080D;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
 
-        /* ===== DARK MODE ===== */
-        [data-theme="dark"] {
-            --bg: #0a0a0a;
-            --bg-secondary: #141414;
-            --card-bg: #1a1a1a;
-            --text: #f0f0f0;
-            --text-light: #a0a0a0;
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            --border-color: rgba(255, 255, 255, 0.06);
-            --header-bg: rgba(10, 10, 10, 0.92);
-            --gray: #141414;
-        }
-        [data-theme="dark"] .product-card,
-        [data-theme="dark"] .accessory-card,
-        [data-theme="dark"] .service-card,
-        [data-theme="dark"] .testimonial-card {
-            background: var(--card-bg);
-            border-color: var(--border-color);
-        }
-        [data-theme="dark"] .hero {
-            background: linear-gradient(135deg, #0a0a0a 0%, #141414 100%);
-        }
-        [data-theme="dark"] .bg-marquee {
-            opacity: 0.02;
-        }
-        [data-theme="dark"] .filter-btn {
-            background: var(--card-bg);
-            color: var(--text);
-            border-color: var(--border-color);
-        }
-        [data-theme="dark"] .filter-btn.active {
-            background: var(--blue);
-            color: white;
-        }
-        [data-theme="dark"] header {
-            background: var(--header-bg);
-            border-bottom-color: var(--border-color);
-        }
-        [data-theme="dark"] .cart-sidebar {
-            background: var(--card-bg);
-        }
-        [data-theme="dark"] .cart-item {
-            border-bottom-color: var(--border-color);
-        }
+    /* ── HEADER ── */
+    .site-header{text-align:center;padding:64px 20px 50px;background:#08080D}
+    .logo{display:inline-block;font-size:clamp(44px,10vw,88px);font-weight:900;letter-spacing:.2em;text-transform:uppercase;background:linear-gradient(135deg,#E50914 0%,#FF5C67 45%,#7B4FD4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 40px rgba(229,9,20,.4))}
+    .site-tagline{margin-top:16px;font-size:clamp(11px,2vw,15px);font-weight:500;color:#6666AA;letter-spacing:.14em;text-transform:uppercase}
+    .nav-pills{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:32px}
+    .nav-pill{padding:8px 18px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:.06em;text-decoration:none;text-transform:uppercase;border:2px solid;transition:all .2s ease}
+    .pill-n{color:#E50914;border-color:rgba(229,9,20,.5);background:rgba(229,9,20,.08)}
+    .pill-p{color:#00A8E1;border-color:rgba(0,168,225,.5);background:rgba(0,168,225,.08)}
+    .pill-c{color:#FF6D00;border-color:rgba(255,109,0,.5);background:rgba(255,109,0,.08)}
+    .pill-s{color:#1DB954;border-color:rgba(29,185,84,.5);background:rgba(29,185,84,.08)}
+    .nav-pill:hover{transform:translateY(-2px);filter:brightness(1.2)}
 
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.6;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-        img {
-            max-width: 100%;
-            display: block;
-        }
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+    /* ── PLATFORM SECTIONS ── */
+    .platform-section{position:relative;overflow:hidden;padding:0 0 70px}
+    .platform-hero{position:relative;height:340px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+    .platform-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center top;filter:brightness(.42) saturate(1.2);transition:transform 8s ease}
+    .platform-section:hover .platform-hero-bg{transform:scale(1.04)}
+    .platform-hero-overlay{position:absolute;inset:0}
+    .overlay-netflix{background:linear-gradient(to bottom,rgba(229,9,20,.1) 0%,transparent 40%,rgba(8,8,13,.85) 80%,#08080D 100%)}
+    .overlay-prime{background:linear-gradient(to bottom,rgba(0,168,225,.12) 0%,transparent 40%,rgba(8,8,13,.85) 80%,#08080D 100%)}
+    .overlay-crunchyroll{background:linear-gradient(to bottom,rgba(255,109,0,.12) 0%,transparent 40%,rgba(8,8,13,.85) 80%,#08080D 100%)}
+    .overlay-spotify{background:linear-gradient(to bottom,rgba(29,185,84,.12) 0%,transparent 40%,rgba(8,8,13,.85) 80%,#08080D 100%)}
+    .platform-hero-content{position:relative;z-index:2;text-align:center;padding:0 20px 28px}
+    .platform-logo-badge{display:inline-flex;align-items:center;gap:10px;padding:7px 20px;border-radius:50px;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;border:2px solid;margin-bottom:12px;backdrop-filter:blur(8px)}
+    .badge-n{color:#FF3B3B;border-color:rgba(229,9,20,.6);background:rgba(229,9,20,.15)}
+    .badge-p{color:#29C4F6;border-color:rgba(0,168,225,.6);background:rgba(0,168,225,.15)}
+    .badge-c{color:#FF8C00;border-color:rgba(255,109,0,.6);background:rgba(255,109,0,.15)}
+    .badge-s{color:#1DB954;border-color:rgba(29,185,84,.6);background:rgba(29,185,84,.15)}
+    .badge-dot{width:8px;height:8px;border-radius:50%}
+    .platform-title{font-size:clamp(28px,5vw,50px);font-weight:900;line-height:1.1;text-shadow:0 4px 24px rgba(0,0,0,.6)}
+    .platform-subtitle{margin-top:8px;font-size:13px;color:rgba(255,255,255,.6)}
 
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--blue);
-            border-radius: 10px;
-        }
+    /* ── CARDS ── */
+    .platform-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;max-width:1080px;margin:-20px auto 0;padding:0 24px;position:relative;z-index:3}
+    .platform-cards.three-cols{grid-template-columns:repeat(auto-fit,minmax(230px,1fr));max-width:820px}
+    .pcard{border-radius:18px;padding:26px 22px 22px;position:relative;overflow:hidden;border:1.5px solid rgba(255,255,255,.07);background:rgba(14,14,22,.92);backdrop-filter:blur(12px);transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+    .pcard.theme-n:hover{transform:translateY(-7px);border-color:rgba(229,9,20,.55);box-shadow:0 24px 60px rgba(229,9,20,.2)}
+    .pcard.theme-n.featured{border-color:rgba(229,9,20,.4);box-shadow:0 0 40px rgba(229,9,20,.15)}
+    .pcard.theme-p:hover{transform:translateY(-7px);border-color:rgba(0,168,225,.55);box-shadow:0 24px 60px rgba(0,168,225,.2)}
+    .pcard.theme-p.featured{border-color:rgba(0,168,225,.4);box-shadow:0 0 40px rgba(0,168,225,.15)}
+    .pcard.theme-c:hover{transform:translateY(-7px);border-color:rgba(255,109,0,.55);box-shadow:0 24px 60px rgba(255,109,0,.2)}
+    .pcard.theme-c.featured{border-color:rgba(255,109,0,.4);box-shadow:0 0 40px rgba(255,109,0,.15)}
+    .pcard.theme-s:hover{transform:translateY(-7px);border-color:rgba(29,185,84,.55);box-shadow:0 24px 60px rgba(29,185,84,.2)}
+    .pcard.theme-s.featured{border-color:rgba(29,185,84,.4);box-shadow:0 0 40px rgba(29,185,84,.15)}
+    .pcard-glow{position:absolute;top:0;left:0;right:0;height:2px;border-radius:18px 18px 0 0}
+    .glow-n{background:linear-gradient(90deg,transparent,#E50914,transparent)}
+    .glow-p{background:linear-gradient(90deg,transparent,#00A8E1,transparent)}
+    .glow-c{background:linear-gradient(90deg,transparent,#FF6D00,transparent)}
+    .glow-s{background:linear-gradient(90deg,transparent,#1DB954,transparent)}
+    .featured-tag{position:absolute;top:13px;right:13px;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:50px}
+    .ftag-n{background:linear-gradient(135deg,#E50914,#FF5C67);color:#fff}
+    .ftag-p{background:linear-gradient(135deg,#0072B8,#00C6FF);color:#fff}
+    .ftag-c{background:linear-gradient(135deg,#E05C00,#FF9A3C);color:#fff}
+    .ftag-s{background:linear-gradient(135deg,#148F42,#1DB954);color:#fff}
+    .ftag-gold{background:linear-gradient(135deg,#D4A017,#FFD700);color:#000}
+    .pcard-dur{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#66667A}
+    .pcard-price{display:flex;align-items:baseline;gap:5px;margin-top:10px}
+    .pcard-amount{font-size:clamp(28px,4vw,38px);font-weight:900;color:#fff;line-height:1}
+    .pcard-unit{font-size:13px;font-weight:600;color:#55556A}
+    .pcard-monthly{font-size:11px;color:#55556A;margin-top:4px}
+    .pcard-saving{display:inline-block;margin-top:7px;font-size:10px;font-weight:700;color:#4ADE80;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:50px;padding:3px 10px}
+    .pcard-features{margin-top:16px;display:flex;flex-direction:column;gap:7px}
+    .pfeature{display:flex;align-items:center;gap:9px;font-size:12px;color:#B0B0C8}
+    .pf-check{width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;flex-shrink:0}
+    .check-n{background:rgba(229,9,20,.18);color:#FF5C67}
+    .check-p{background:rgba(0,168,225,.18);color:#29C4F6}
+    .check-c{background:rgba(255,109,0,.18);color:#FF8C00}
+    .check-s{background:rgba(29,185,84,.18);color:#1DB954}
+    .pcta{display:block;width:100%;margin-top:20px;padding:13px 18px;border-radius:11px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease}
+    .pcta::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.09),transparent);border-radius:11px}
+    .btn-n{background:linear-gradient(135deg,#E50914,#B20710);color:#fff;box-shadow:0 6px 22px rgba(229,9,20,.38)}
+    .btn-n:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(229,9,20,.5)}
+    .btn-p{background:linear-gradient(135deg,#0072B8,#00A8E1);color:#fff;box-shadow:0 6px 22px rgba(0,168,225,.35)}
+    .btn-p:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,168,225,.48)}
+    .btn-c{background:linear-gradient(135deg,#CC4E00,#FF6D00);color:#fff;box-shadow:0 6px 22px rgba(255,109,0,.38)}
+    .btn-c:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,109,0,.5)}
+    .btn-s{background:linear-gradient(135deg,#148F42,#1DB954);color:#fff;box-shadow:0 6px 22px rgba(29,185,84,.38)}
+    .btn-s:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(29,185,84,.5)}
 
-        /* ===== BACKGROUND MARQUEE ===== */
-        .bg-marquee {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-            opacity: 0.03;
-            font-size: 120px;
-            font-weight: 900;
-            color: var(--black);
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            user-select: none;
-            animation: marqueeScroll 40s linear infinite;
-        }
-        @keyframes marqueeScroll {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-        .bg-marquee span {
-            display: inline-block;
-            padding-right: 200px;
-        }
+    /* ── FAQ ACCORDÉON ── */
+    .faq-section{max-width:780px;margin:48px auto 0;padding:0 24px}
+    .faq-title{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+    .faq-title span{display:inline-block;width:28px;height:2px;border-radius:2px}
+    .faq-item{border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;margin-bottom:8px;background:rgba(14,14,22,.7);transition:border-color .25s}
+    .faq-item:hover{border-color:rgba(255,255,255,.14)}
+    .faq-item.open{border-color:var(--faq-color,rgba(255,255,255,.2))}
+    .faq-q{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;cursor:pointer;gap:12px;user-select:none}
+    .faq-q-text{font-size:13px;font-weight:600;color:#E0E0F0;line-height:1.4;flex:1}
+    .faq-arrow{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:rgba(255,255,255,.07);color:#888;transition:transform .3s,background .2s}
+    .faq-item.open .faq-arrow{transform:rotate(180deg);background:var(--faq-color,rgba(255,255,255,.15));color:#fff}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s}
+    .faq-item.open .faq-a{max-height:300px}
+    .faq-a-inner{padding:0 18px 16px;font-size:12px;color:#8888A8;line-height:1.7}
+    .faq-a-inner strong{color:#C0C0D8}
 
-        /* ===== HEADER / NAVBAR ===== */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 16px 0;
-            background: var(--header-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            transition: var(--transition);
-        }
-        header.scrolled {
-            padding: 10px 0;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
-        }
-        .nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .nav-logo {
-            font-size: 26px;
-            font-weight: 900;
-            letter-spacing: -1px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .nav-logo span {
-            color: var(--blue);
-        }
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-            list-style: none;
-        }
-        .nav-links a {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text);
-            transition: var(--transition);
-            position: relative;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--blue);
-            transition: var(--transition);
-        }
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        .nav-links a:hover {
-            color: var(--blue);
-        }
-        .nav-icons {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        .nav-icons i {
-            font-size: 20px;
-            cursor: pointer;
-            transition: var(--transition);
-            color: var(--text);
-        }
-        .nav-icons i:hover {
-            color: var(--blue);
-            transform: scale(1.1);
-        }
-        .cart-badge {
-            background: var(--blue);
-            color: white;
-            border-radius: 50%;
-            padding: 2px 8px;
-            font-size: 11px;
-            font-weight: 700;
-            position: relative;
-            top: -10px;
-            right: 8px;
-        }
-        .menu-toggle {
-            display: none;
-            font-size: 28px;
-            cursor: pointer;
-        }
-        .theme-toggle {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--text);
-            transition: var(--transition);
-        }
-        .theme-toggle:hover {
-            color: var(--blue);
-            transform: rotate(20deg);
-        }
+    /* ── MODAL ── */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center;padding:16px}
+    .modal-overlay.active{display:flex}
+    .modal{background:#0E0E1A;border:1.5px solid rgba(255,255,255,.1);border-radius:26px;width:100%;max-width:500px;overflow:hidden;animation:modalIn .3s ease;position:relative;max-height:90vh;overflow-y:auto}
+    @keyframes modalIn{from{opacity:0;transform:translateY(28px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+    .modal-top{padding:30px 28px 22px;text-align:center;position:relative;border-bottom:1px solid rgba(255,255,255,.06)}
+    .modal-top::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--modal-color,#E50914)}
+    .modal-top::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,var(--modal-glow,rgba(229,9,20,.12)),transparent 70%);pointer-events:none}
+    .modal-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.07);border:none;color:#888;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2}
+    .modal-close:hover{background:rgba(255,255,255,.15);color:#fff}
+    .modal-platform-icon{font-size:34px;margin-bottom:8px;display:block}
+    .modal-platform-name{display:inline-block;padding:4px 14px;border-radius:50px;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid;margin-bottom:10px}
+    .modal-offer-label{font-size:12px;color:#7777AA;font-weight:500;margin-bottom:5px}
+    .modal-price-display{font-size:44px;font-weight:900;color:#fff;line-height:1}
+    .modal-price-display sup{font-size:16px;font-weight:700;color:#7777AA;vertical-align:super;margin-left:4px}
+    .modal-duration-pill{display:inline-block;margin-top:8px;padding:5px 14px;border-radius:50px;font-size:12px;font-weight:700;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#C0C0D8}
+    .modal-body{padding:18px 22px 26px}
+    .pay-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+    .pay-tab{border-radius:14px;padding:14px 10px;border:2px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);cursor:pointer;text-align:center;transition:all .25s ease}
+    .pay-tab:hover{transform:translateY(-2px)}
+    .pay-tab.active-tab{border-color:var(--tab-color);background:var(--tab-bg);box-shadow:0 0 20px var(--tab-shadow)}
+    .pay-tab-logo{font-size:28px;margin-bottom:6px}
+    .pay-tab-name{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+    .pay-tab-num{font-size:13px;font-weight:700;color:#fff}
+    .pay-tab-status{font-size:10px;margin-top:4px;color:#4ADE80;font-weight:600;opacity:0;transition:opacity .2s}
+    .pay-tab.active-tab .pay-tab-status{opacity:1}
+    .pay-panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:18px;margin-bottom:16px;display:none}
+    .pay-panel.visible{display:block;animation:fadeIn .25s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    .pay-panel-title{font-size:11px;font-weight:700;color:#7777AA;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+    .pay-number-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+    .pay-number-label{font-size:10px;color:#7777AA;font-weight:600;margin-bottom:3px}
+    .pay-number-value{font-size:16px;font-weight:800;color:#fff;letter-spacing:.04em}
+    .copy-btn{padding:7px 14px;border-radius:8px;border:none;font-family:'Inter',sans-serif;font-size:10px;font-weight:800;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .2s;white-space:nowrap}
+    .pay-amount-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 14px}
+    .pay-amount-label{font-size:10px;color:#7777AA;font-weight:600;margin-bottom:3px}
+    .pay-amount-value{font-size:18px;font-weight:900;color:#fff}
+    .copy-btn-amount{padding:7px 14px;border-radius:8px;border:none;font-family:'Inter',sans-serif;font-size:10px;font-weight:800;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .2s;white-space:nowrap;background:rgba(255,255,255,.1);color:#fff}
+    .copy-btn-amount:hover{background:rgba(255,255,255,.18)}
+    .steps{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+    .step-row{display:flex;align-items:flex-start;gap:11px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
+    .step-n{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px}
+    .step-t{font-size:12px;color:#B0B0C8;line-height:1.5}
+    .step-t strong{color:#fff}
+    .wa-confirm-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;border-radius:13px;background:#25D366;color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;text-decoration:none;letter-spacing:.04em;border:none;cursor:pointer;box-shadow:0 6px 24px rgba(37,211,102,.35);transition:transform .2s,box-shadow .2s}
+    .wa-confirm-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(37,211,102,.5)}
+    .modal-note{text-align:center;font-size:11px;color:#44445A;margin-top:10px}
 
-        /* ===== HERO ===== */
-        .hero {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 120px 0 80px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7ec 100%);
-            overflow: hidden;
-            transition: background 0.3s ease;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, var(--blue-glow), transparent 70%);
-            border-radius: 50%;
-            opacity: 0.3;
-            pointer-events: none;
-        }
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-            position: relative;
-        }
-        .hero-content h1 {
-            font-size: 72px;
-            font-weight: 900;
-            line-height: 1.05;
-            letter-spacing: -2px;
-            margin-bottom: 16px;
-        }
-        .hero-content h1 span {
-            color: var(--blue);
-            text-shadow: 0 0 40px var(--blue-glow);
-        }
-        .hero-content p {
-            font-size: 20px;
-            color: var(--text-light);
-            max-width: 480px;
-            margin-bottom: 36px;
-            font-weight: 400;
-        }
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 16px 36px;
-            border-radius: 60px;
-            font-weight: 600;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-        .btn-primary {
-            background: var(--blue);
-            color: white;
-            box-shadow: 0 8px 30px var(--blue-glow);
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px var(--blue-glow);
-        }
-        .btn-outline {
-            background: transparent;
-            color: var(--text);
-            border: 2px solid var(--text);
-        }
-        .btn-outline:hover {
-            background: var(--text);
-            color: var(--bg);
-            transform: translateY(-3px);
-        }
-        .btn-success {
-            background: #10B981;
-            color: white;
-        }
-        .btn-success:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px #10B98155;
-        }
-        .btn-orange {
-            background: #FF7A00;
-            color: white;
-        }
-        .btn-orange:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px #FF7A0055;
-        }
-        .btn-whatsapp {
-            background: #25D366;
-            color: white;
-        }
-        .btn-whatsapp:hover {
-            background: #1da85a;
-            transform: translateY(-2px);
-        }
-        .hero-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-        .hero-image img {
-            max-width: 100%;
-            height: auto;
-            filter: drop-shadow(0 30px 80px rgba(0, 0, 0, 0.15));
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
-        }
+    /* ── DIVIDER ── */
+    .section-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
 
-        /* ===== SECTION TITLES ===== */
-        .section {
-            padding: 80px 0;
-            position: relative;
-            z-index: 1;
-        }
-        .section-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-        .section-header h2 {
-            font-size: 44px;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
-        .section-header h2 span {
-            color: var(--blue);
-        }
-        .section-header p {
-            color: var(--text-light);
-            font-size: 18px;
-            margin-top: 8px;
-        }
+    /* ── INFO ── */
+    .info-section{background:#0B0B13;padding:56px 24px}
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;max-width:900px;margin:0 auto}
+    .info-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:22px 18px;text-align:center}
+    .info-box .icon{font-size:24px;margin-bottom:10px}
+    .info-box h4{font-size:13px;font-weight:700;color:#fff;margin-bottom:5px}
+    .info-box p{font-size:11px;color:#55556A;line-height:1.65}
 
-        /* ===== FILTERS ===== */
-        .filters {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 40px;
-        }
-        .filter-btn {
-            padding: 10px 28px;
-            border-radius: 40px;
-            border: 1px solid #ddd;
-            background: white;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 14px;
-            color: var(--text);
-        }
-        .filter-btn.active,
-        .filter-btn:hover {
-            background: var(--blue);
-            color: white;
-            border-color: var(--blue);
-            box-shadow: 0 4px 20px var(--blue-glow);
-        }
+    /* ── FOOTER ── */
+    footer{background:#08080D;text-align:center;padding:44px 20px 30px;border-top:1px solid rgba(255,255,255,.05)}
+    .footer-logo{font-size:22px;font-weight:900;letter-spacing:.2em;background:linear-gradient(135deg,#E50914,#7B4FD4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    footer p{margin-top:10px;font-size:12px;color:#44445A}
+    footer a{color:#55556A;text-decoration:none}
+    footer a:hover{color:#fff}
 
-        /* ===== PRODUCT GRID ===== */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 30px;
-        }
-        .product-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 24px 20px 28px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            position: relative;
-            border: 1px solid var(--border-color);
-            text-align: center;
-        }
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 80px rgba(0, 87, 255, 0.10);
-            border-color: var(--blue);
-        }
-        .product-card .favorite {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            font-size: 20px;
-            color: #ddd;
-            cursor: pointer;
-            transition: var(--transition);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(6px);
-            padding: 8px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .product-card .favorite.active {
-            color: #ff3b30;
-        }
-        .product-card .favorite:hover {
-            transform: scale(1.2);
-        }
-        .product-card .product-img {
-            height: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-        .product-card .product-img i {
-            font-size: 80px;
-            color: var(--text);
-            opacity: 0.15;
-        }
-        .product-card h3 {
-            font-size: 17px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        .product-card .brand-tag {
-            display: inline-block;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--blue);
-            background: var(--blue-glow);
-            padding: 2px 14px;
-            border-radius: 20px;
-            margin-bottom: 8px;
-        }
-        .product-card .price {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text);
-            margin: 8px 0 16px;
-        }
-        .product-card .price small {
-            font-weight: 400;
-            font-size: 14px;
-            color: var(--text-light);
-        }
-        .product-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .product-actions .btn {
-            padding: 10px 20px;
-            font-size: 13px;
-            flex: 1;
-            justify-content: center;
-            min-width: 100px;
-        }
+    /* ── FLOAT WA ── */
+    .wa-float{position:fixed;bottom:26px;right:26px;z-index:200;background:#25D366;color:#fff;border-radius:50px;padding:13px 22px;font-size:13px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:9px;box-shadow:0 8px 32px rgba(37,211,102,.45);transition:transform .2s,box-shadow .2s}
+    .wa-float:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(37,211,102,.55)}
 
-        /* ===== ACCESSORIES ===== */
-        .accessory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 24px;
-        }
-        .accessory-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 24px 16px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            border: 1px solid var(--border-color);
-        }
-        .accessory-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--blue);
-        }
-        .accessory-card i {
-            font-size: 48px;
-            color: var(--blue);
-            opacity: 0.7;
-            margin-bottom: 12px;
-        }
-        .accessory-card h4 {
-            font-weight: 600;
-            font-size: 15px;
-        }
-        .accessory-card .price {
-            font-weight: 700;
-            font-size: 16px;
-            margin: 6px 0 12px;
-        }
+    /* ── TOAST ── */
+    .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:#1A1A2E;color:#fff;font-size:13px;font-weight:600;padding:10px 22px;border-radius:50px;border:1px solid rgba(255,255,255,.12);z-index:9999;opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
+    .toast.show{opacity:1}
 
-        /* ===== SERVICES ===== */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 30px;
-        }
-        .service-card {
-            background: var(--card-bg);
-            padding: 32px 24px;
-            border-radius: var(--radius);
-            text-align: center;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            border: 1px solid var(--border-color);
-        }
-        .service-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: var(--blue);
-            box-shadow: 0 20px 60px var(--blue-glow);
-        }
-        .service-card i {
-            font-size: 40px;
-            color: var(--blue);
-            margin-bottom: 16px;
-        }
-        .service-card h4 {
-            font-size: 17px;
-            font-weight: 600;
-        }
-
-        /* ===== TESTIMONIALS ===== */
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 30px;
-        }
-        .testimonial-card {
-            background: var(--card-bg);
-            padding: 28px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-        }
-        .testimonial-card .stars {
-            color: #fbbf24;
-            margin-bottom: 10px;
-        }
-        .testimonial-card p {
-            font-style: italic;
-            color: var(--text-light);
-        }
-        .testimonial-card .author {
-            font-weight: 600;
-            margin-top: 12px;
-        }
-
-        /* ===== ABOUT & CONTACT ===== */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-        .about-grid h2 {
-            font-size: 40px;
-            font-weight: 800;
-        }
-        .about-grid p {
-            color: var(--text-light);
-            font-size: 18px;
-            line-height: 1.8;
-        }
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .contact-info .item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 18px;
-        }
-        .contact-info .item i {
-            width: 44px;
-            height: 44px;
-            background: var(--blue);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-        .map-container {
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            height: 320px;
-        }
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        /* ===== PAYMENT SECTION ===== */
-        .payment-methods {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-top: 24px;
-        }
-        .payment-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 24px;
-            border: 2px solid var(--border-color);
-            transition: var(--transition);
-            text-align: center;
-        }
-        .payment-card:hover {
-            border-color: var(--blue);
-            transform: translateY(-4px);
-        }
-        .payment-card .icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
-        .payment-card .number {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text);
-        }
-        .payment-card .label {
-            color: var(--text-light);
-            font-size: 14px;
-            margin-top: 4px;
-        }
-        .payment-card .copy-btn {
-            margin-top: 12px;
-            padding: 8px 20px;
-            border-radius: 30px;
-            border: 1px solid var(--border-color);
-            background: transparent;
-            cursor: pointer;
-            transition: var(--transition);
-            color: var(--text);
-            font-size: 13px;
-        }
-        .payment-card .copy-btn:hover {
-            background: var(--blue);
-            color: white;
-            border-color: var(--blue);
-        }
-
-        /* ===== FOOTER ===== */
-        footer {
-            background: var(--dark);
-            color: rgba(255, 255, 255, 0.7);
-            padding: 48px 0 24px;
-            position: relative;
-            z-index: 1;
-        }
-        footer .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 32px;
-        }
-        footer .logo {
-            font-size: 28px;
-            font-weight: 900;
-            color: white;
-        }
-        footer .logo span {
-            color: var(--blue);
-        }
-        footer .socials {
-            display: flex;
-            gap: 16px;
-            margin-top: 16px;
-        }
-        footer .socials a {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            color: white;
-            font-size: 18px;
-        }
-        footer .socials a:hover {
-            background: var(--blue);
-            transform: translateY(-3px);
-        }
-        footer h4 {
-            color: white;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-        footer ul {
-            list-style: none;
-        }
-        footer ul li {
-            margin-bottom: 8px;
-        }
-        footer ul li a:hover {
-            color: white;
-        }
-        footer .bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 24px;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        /* ===== BACK TO TOP ===== */
-        .back-top {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            width: 52px;
-            height: 52px;
-            background: var(--blue);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 22px;
-            cursor: pointer;
-            box-shadow: 0 8px 30px var(--blue-glow);
-            transition: var(--transition);
-            z-index: 999;
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(0.8);
-        }
-        .back-top.visible {
-            opacity: 1;
-            pointer-events: auto;
-            transform: scale(1);
-        }
-        .back-top:hover {
-            transform: scale(1.1) translateY(-4px);
-        }
-
-        /* ===== CART SIDEBAR ===== */
-        .cart-overlay {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: var(--transition);
-        }
-        .cart-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .cart-sidebar {
-            position: fixed;
-            top: 0;
-            right: -420px;
-            width: 400px;
-            height: 100%;
-            background: var(--card-bg);
-            z-index: 2001;
-            padding: 32px 24px;
-            transition: var(--transition);
-            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-        }
-        .cart-sidebar.open {
-            right: 0;
-        }
-        .cart-sidebar h2 {
-            font-size: 24px;
-            margin-bottom: 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .cart-sidebar .close-cart {
-            font-size: 28px;
-            cursor: pointer;
-        }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .cart-item .qty {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .cart-item .qty button {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 1px solid var(--border-color);
-            background: var(--bg);
-            cursor: pointer;
-            color: var(--text);
-        }
-        .cart-total {
-            font-size: 22px;
-            font-weight: 700;
-            margin: 24px 0;
-        }
-        .cart-checkout {
-            width: 100%;
-            padding: 16px;
-            background: var(--blue);
-            color: white;
-            border: none;
-            border-radius: 60px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-bottom: 10px;
-        }
-        .cart-checkout:hover {
-            background: #0044cc;
-        }
-        .cart-checkout-whatsapp {
-            width: 100%;
-            padding: 16px;
-            background: #25D366;
-            color: white;
-            border: none;
-            border-radius: 60px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .cart-checkout-whatsapp:hover {
-            background: #1da85a;
-        }
-
-        /* ===== TOAST NOTIFICATION ===== */
-        .toast {
-            position: fixed;
-            bottom: 100px;
-            right: 40px;
-            background: var(--card-bg);
-            color: var(--text);
-            padding: 16px 24px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border-left: 4px solid var(--blue);
-            z-index: 3000;
-            transform: translateX(120%);
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            max-width: 380px;
-            font-weight: 500;
-        }
-        .toast.show {
-            transform: translateX(0);
-        }
-        .toast i {
-            color: var(--blue);
-            margin-right: 10px;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .hero-content p {
-                margin: 0 auto 36px;
-            }
-            .hero-buttons {
-                justify-content: center;
-            }
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
-            footer .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .payment-methods {
-                grid-template-columns: 1fr;
-            }
-        }
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                background: var(--card-bg);
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                padding: 24px;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-                gap: 16px;
-            }
-            .nav-links.open {
-                display: flex;
-            }
-            .menu-toggle {
-                display: block;
-            }
-            .hero-content h1 {
-                font-size: 44px;
-            }
-            .section-header h2 {
-                font-size: 32px;
-            }
-            .cart-sidebar {
-                width: 100%;
-                right: -100%;
-            }
-            footer .footer-grid {
-                grid-template-columns: 1fr;
-            }
-            .product-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .payment-methods {
-                grid-template-columns: 1fr;
-            }
-        }
-        @media (max-width: 480px) {
-            .product-grid {
-                grid-template-columns: 1fr;
-            }
-            .hero-content h1 {
-                font-size: 34px;
-            }
-            .btn {
-                padding: 14px 24px;
-                font-size: 14px;
-            }
-        }
-    </style>
+    @media(max-width:640px){
+      .platform-hero{height:260px}
+      .platform-cards{grid-template-columns:1fr 1fr;gap:12px;padding:0 14px}
+      .wa-float .wa-label{display:none}
+      .modal-price-display{font-size:36px}
+      .faq-section{padding:0 14px}
+    }
+    @media(max-width:400px){.platform-cards{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
 
-    <!-- ===== BACKGROUND MARQUEE ===== -->
-    <div class="bg-marquee">
-        <span>APPLE STAR ✦ APPLE STAR ✦ APPLE STAR ✦ APPLE STAR ✦</span>
-        <span>APPLE STAR ✦ APPLE STAR ✦ APPLE STAR ✦ APPLE STAR ✦</span>
+<div class="toast" id="toast"></div>
+
+<!-- ══ MODAL PAIEMENT ══ -->
+<div class="modal-overlay" id="payModal">
+  <div class="modal">
+    <div class="modal-top" id="modalTop">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <span class="modal-platform-icon" id="modalIcon"></span>
+      <div class="modal-platform-name" id="modalPlatformName"></div>
+      <div class="modal-offer-label">Votre offre sélectionnée</div>
+      <div class="modal-price-display" id="modalPriceDisplay"></div>
+      <div class="modal-duration-pill" id="modalDurationPill"></div>
     </div>
-
-    <!-- ===== HEADER ===== -->
-    <header id="header">
-        <div class="container">
-            <nav class="nav">
-                <div class="nav-logo">
-                    <i class="fas fa-apple" style="color:var(--blue);"></i>
-                    APPLE<span>STAR</span>
-                </div>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="#home">Accueil</a></li>
-                    <li><a href="#products">Téléphones</a></li>
-                    <li><a href="#accessories">Accessoires</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#about">À propos</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-                <div class="nav-icons">
-                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Changer de thème">
-                        <i class="fas fa-moon" id="themeIcon"></i>
-                    </button>
-                    <i class="fas fa-search" onclick="alert('🔍 Recherche ouverte')"></i>
-                    <i class="fas fa-heart" onclick="alert('❤️ Vos favoris : ' + favorites.size + ' produits')"></i>
-                    <i class="fas fa-shopping-bag" onclick="toggleCart()"></i>
-                    <span class="cart-badge" id="cartCount">0</span>
-                    <div class="menu-toggle" onclick="toggleMobileMenu()">
-                        <i class="fas fa-bars"></i>
-                    </div>
-                </div>
-            </nav>
+    <div class="modal-body">
+      <div class="pay-tabs">
+        <div class="pay-tab" id="tabMTN" onclick="selectMethod('mtn')">
+          <div class="pay-tab-logo">🟡</div>
+          <div class="pay-tab-name" style="color:#FFCC00">MTN MoMo</div>
+          <div class="pay-tab-num">+237 682 470 908</div>
+          <div class="pay-tab-status">✓ Sélectionné</div>
         </div>
-    </header>
-
-    <!-- ===== HERO ===== -->
-    <section class="hero" id="home">
-        <div class="container hero-grid">
-            <div class="hero-content">
-                <h1>APPLE <span>STAR</span></h1>
-                <p>Votre boutique de smartphones, tablettes et accessoires à Bertoua. Livraison rapide et service professionnel.</p>
-                <div class="hero-buttons">
-                    <a href="#products" class="btn btn-primary">
-                        <i class="fas fa-shopping-bag"></i> Commander maintenant
-                    </a>
-                    <a href="#contact" class="btn btn-outline">
-                        <i class="fas fa-headset"></i> Nous contacter
-                    </a>
-                </div>
-                <div style="margin-top:32px;display:flex;gap:32px;flex-wrap:wrap;justify-content:center;">
-                    <div><strong style="font-size:28px;color:var(--blue);">150+</strong><br><span style="color:var(--text-light);font-size:14px;">Produits vendus</span></div>
-                    <div><strong style="font-size:28px;color:var(--blue);">98%</strong><br><span style="color:var(--text-light);font-size:14px;">Clients satisfaits</span></div>
-                    <div><strong style="font-size:28px;color:var(--blue);">24/7</strong><br><span style="color:var(--text-light);font-size:14px;">Support WhatsApp</span></div>
-                </div>
-            </div>
-            <div class="hero-image">
-                <img src="https://placehold.co/500x500/0a0a0a/0057FF?text=APPLE+STAR" alt="APPLE STAR Smartphones" />
-            </div>
+        <div class="pay-tab" id="tabOrange" onclick="selectMethod('orange')">
+          <div class="pay-tab-logo">🟠</div>
+          <div class="pay-tab-name" style="color:#FF6600">Orange Money</div>
+          <div class="pay-tab-num">+237 695 956 018</div>
+          <div class="pay-tab-status">✓ Sélectionné</div>
         </div>
-    </section>
-
-    <!-- ===== PRODUCTS ===== -->
-    <section class="section" id="products">
-        <div class="container">
-            <div class="section-header">
-                <h2>Nos <span>Téléphones</span></h2>
-                <p>Les meilleurs smartphones premium au Cameroun</p>
-            </div>
-            <div class="filters" id="filterContainer">
-                <button class="filter-btn active" data-brand="all">Tous</button>
-                <button class="filter-btn" data-brand="iPhone">iPhone</button>
-                <button class="filter-btn" data-brand="Samsung">Samsung</button>
-                <button class="filter-btn" data-brand="Xiaomi">Xiaomi</button>
-                <button class="filter-btn" data-brand="Tecno">Tecno</button>
-                <button class="filter-btn" data-brand="Infinix">Infinix</button>
-            </div>
-            <div class="product-grid" id="productGrid"></div>
+      </div>
+      <div class="pay-panel" id="panelMTN">
+        <div class="pay-panel-title">🟡 Paiement via MTN Mobile Money</div>
+        <div class="pay-number-row">
+          <div><div class="pay-number-label">Numéro MTN MoMo</div><div class="pay-number-value">+237 682 470 908</div></div>
+          <button class="copy-btn" style="background:#FFCC00;color:#000" onclick="copyText('237682470908','Numéro MTN')">📋 Copier</button>
         </div>
-    </section>
-
-    <!-- ===== ACCESSORIES ===== -->
-    <section class="section" id="accessories" style="background:var(--bg-secondary);">
-        <div class="container">
-            <div class="section-header">
-                <h2>Nos <span>Accessoires</span></h2>
-                <p>Complétez votre expérience Apple</p>
-            </div>
-            <div class="accessory-grid" id="accessoryGrid"></div>
+        <div class="pay-amount-row">
+          <div><div class="pay-amount-label">Montant exact à envoyer</div><div class="pay-amount-value" id="mtnAmount"></div></div>
+          <button class="copy-btn-amount" onclick="copyAmount()">📋 Copier</button>
         </div>
-    </section>
-
-    <!-- ===== SERVICES ===== -->
-    <section class="section" id="services">
-        <div class="container">
-            <div class="section-header">
-                <h2>Nos <span>Services</span></h2>
-                <p>Une expérience client exceptionnelle</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card"><i class="fas fa-mobile-alt"></i><h4>Vente de smartphones</h4></div>
-                <div class="service-card"><i class="fas fa-headphones"></i><h4>Vente d'accessoires</h4></div>
-                <div class="service-card"><i class="fas fa-truck"></i><h4>Livraison rapide</h4></div>
-                <div class="service-card"><i class="fas fa-user-tie"></i><h4>Conseils personnalisés</h4></div>
-                <div class="service-card"><i class="fab fa-whatsapp"></i><h4>Support WhatsApp 24h/24</h4></div>
-                <div class="service-card"><i class="fas fa-shield-alt"></i><h4>Garantie sur plusieurs produits</h4></div>
-            </div>
+        <!-- CODE USSD MTN -->
+        <div style="margin-top:12px;background:rgba(255,204,0,0.06);border:1.5px dashed rgba(255,204,0,0.35);border-radius:12px;padding:14px 16px;">
+          <div style="font-size:10px;font-weight:800;color:#FFCC00;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">📱 Code USSD à composer</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <div id="mtnUssd" style="font-size:15px;font-weight:800;color:#fff;letter-spacing:.05em;word-break:break-all;flex:1;font-family:monospace;background:rgba(0,0,0,0.3);padding:8px 12px;border-radius:8px;"></div>
+            <button class="copy-btn" style="background:#FFCC00;color:#000;flex-shrink:0" onclick="copyUssd('mtn')">📋 Copier</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:#88886A;">Composez ce code sur votre téléphone et validez l'envoi.</div>
         </div>
-    </section>
-
-    <!-- ===== TESTIMONIALS ===== -->
-    <section class="section" style="background:var(--bg-secondary);">
-        <div class="container">
-            <div class="section-header">
-                <h2>Avis <span>Clients</span></h2>
-                <p>Ce que disent nos clients de APPLE STAR</p>
-            </div>
-            <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>"Le meilleur rapport qualité-prix à Bertoua ! Livraison super rapide, je recommande."</p>
-                    <div class="author">— Jean M.</div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>"Service client incroyable, ils m'ont conseillé le téléphone parfait pour mon budget."</p>
-                    <div class="author">— Sarah K.</div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>"iPhone 16 Pro Max reçu en moins de 24h. Produit authentique, emballage parfait."</p>
-                    <div class="author">— David T.</div>
-                </div>
-            </div>
+      </div>
+      <div class="pay-panel" id="panelOrange">
+        <div class="pay-panel-title">🟠 Paiement via Orange Money</div>
+        <div class="pay-number-row">
+          <div><div class="pay-number-label">Numéro Orange Money</div><div class="pay-number-value">+237 695 956 018</div></div>
+          <button class="copy-btn" style="background:#FF6600;color:#fff" onclick="copyText('237695956018','Numéro Orange')">📋 Copier</button>
         </div>
-    </section>
-
-    <!-- ===== ABOUT ===== -->
-    <section class="section" id="about">
-        <div class="container about-grid">
-            <div>
-                <h2>À propos d'<span style="color:var(--blue);">APPLE STAR</span></h2>
-                <p style="margin-top:16px;">APPLE STAR est une boutique spécialisée dans la vente de smartphones et accessoires à Bertoua, Cameroun. Nous proposons des appareils de qualité avec un service de livraison rapide et sécurisé. Notre engagement : l'excellence, la transparence et la satisfaction totale de nos clients.</p>
-                <div style="display:flex;gap:24px;margin-top:24px;flex-wrap:wrap;">
-                    <div><i class="fas fa-check-circle" style="color:var(--blue);"></i> Produits 100% authentiques</div>
-                    <div><i class="fas fa-check-circle" style="color:var(--blue);"></i> Prix compétitifs</div>
-                    <div><i class="fas fa-check-circle" style="color:var(--blue);"></i> Service après-vente</div>
-                </div>
-            </div>
-            <div>
-                <img src="https://placehold.co/600x400/0a0a0a/0057FF?text=APPLE+STAR+Store" alt="APPLE STAR Boutique" style="border-radius:var(--radius);box-shadow:var(--shadow);" />
-            </div>
+        <div class="pay-amount-row">
+          <div><div class="pay-amount-label">Montant exact à envoyer</div><div class="pay-amount-value" id="orangeAmount"></div></div>
+          <button class="copy-btn-amount" onclick="copyAmount()">📋 Copier</button>
         </div>
-    </section>
-
-    <!-- ===== CONTACT & PAYMENT ===== -->
-    <section class="section" id="contact" style="background:var(--bg-secondary);">
-        <div class="container">
-            <div class="section-header">
-                <h2>Nous <span>Contacter</span></h2>
-                <p>Disponibles 24h/24 sur WhatsApp & Mobile Money</p>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
-                <div>
-                    <div class="contact-info">
-                        <div class="item"><i class="fas fa-store"></i> <span><strong>APPLE STAR</strong> — Bertoua, Cameroun</span></div>
-                        <div class="item"><i class="fas fa-map-marker-alt"></i> <span>Bertoua, Région de l'Est, Cameroun</span></div>
-                        <div class="item"><i class="fab fa-whatsapp"></i> <span><a href="https://wa.me/237695956018" target="_blank" style="color:var(--blue);font-weight:600;">+237 695 956 018</a></span></div>
-                        <div class="item"><i class="fas fa-envelope"></i> <span>contact@applestar.cm</span></div>
-                    </div>
-                    <div style="margin-top:24px;">
-                        <a href="https://wa.me/237695956018" target="_blank" class="btn btn-primary" style="width:100%;justify-content:center;">
-                            <i class="fab fa-whatsapp"></i> Nous écrire sur WhatsApp
-                        </a>
-                    </div>
-
-                    <!-- ===== PAYMENT METHODS ===== -->
-                    <div style="margin-top:32px;">
-                        <h3 style="font-size:22px;font-weight:700;margin-bottom:16px;">
-                            <i class="fas fa-credit-card" style="color:var(--blue);"></i> Paiement Mobile Money
-                        </h3>
-                        <div class="payment-methods">
-                            <div class="payment-card">
-                                <div class="icon">🟧</div>
-                                <div class="label">Orange Money</div>
-                                <div class="number" id="orangeNumber">695 956 018</div>
-                                <button class="copy-btn" onclick="copyNumber('695956018', 'Orange Money')">
-                                    <i class="fas fa-copy"></i> Copier
-                                </button>
-                            </div>
-                            <div class="payment-card">
-                                <div class="icon">🟨</div>
-                                <div class="label">MTN Mobile Money</div>
-                                <div class="number" id="mtnNumber">682 470 908</div>
-                                <button class="copy-btn" onclick="copyNumber('682470908', 'MTN Mobile Money')">
-                                    <i class="fas fa-copy"></i> Copier
-                                </button>
-                            </div>
-                        </div>
-                        <p style="color:var(--text-light);font-size:14px;margin-top:12px;text-align:center;">
-                            <i class="fas fa-info-circle"></i> Après paiement, envoyez votre reçu sur WhatsApp pour validation
-                        </p>
-                    </div>
-                </div>
-                <div class="map-container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127060.48071489307!2d13.66947944233731!3d4.579667343743332!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1140d5b8c4e3e0d3%3A0x4b6b0b0b0b0b0b0b!2sBertoua%2C%20Cameroun!5e0!3m2!1sfr!2sfr!4v1700000000000" allowfullscreen loading="lazy"></iframe>
-                </div>
-            </div>
+        <!-- CODE USSD ORANGE -->
+        <div style="margin-top:12px;background:rgba(255,102,0,0.06);border:1.5px dashed rgba(255,102,0,0.35);border-radius:12px;padding:14px 16px;">
+          <div style="font-size:10px;font-weight:800;color:#FF6600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">📱 Code USSD à composer</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <div id="orangeUssd" style="font-size:15px;font-weight:800;color:#fff;letter-spacing:.05em;word-break:break-all;flex:1;font-family:monospace;background:rgba(0,0,0,0.3);padding:8px 12px;border-radius:8px;"></div>
+            <button class="copy-btn" style="background:#FF6600;color:#fff;flex-shrink:0" onclick="copyUssd('orange')">📋 Copier</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:#88886A;">Composez ce code sur votre téléphone et validez l'envoi.</div>
         </div>
-    </section>
-
-    <!-- ===== FOOTER ===== -->
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <div class="logo">APPLE<span>STAR</span></div>
-                    <p style="margin:12px 0;max-width:300px;">Téléphones • Accessoires • Livraison Rapide</p>
-                    <p><i class="fab fa-whatsapp" style="color:#25D366;"></i> +237 695 956 018</p>
-                    <div class="socials">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-                        <a href="https://wa.me/237695956018" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-                <div>
-                    <h4>Liens rapides</h4>
-                    <ul>
-                        <li><a href="#home">Accueil</a></li>
-                        <li><a href="#products">Téléphones</a></li>
-                        <li><a href="#accessories">Accessoires</a></li>
-                        <li><a href="#services">Services</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#contact">Contact</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Livraison</a></li>
-                        <li><a href="#">Garantie</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="bottom">
-                APPLE STAR © 2026 — Tous droits réservés. Boutique premium à Bertoua, Cameroun.
-            </div>
-        </div>
-    </footer>
-
-    <!-- ===== BACK TO TOP ===== -->
-    <button class="back-top" id="backTop" aria-label="Retour en haut">
-        <i class="fas fa-chevron-up"></i>
-    </button>
-
-    <!-- ===== CART SIDEBAR ===== -->
-    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
-    <div class="cart-sidebar" id="cartSidebar">
-        <h2>
-            🛒 Mon panier
-            <span class="close-cart" onclick="toggleCart()">&times;</span>
-        </h2>
-        <div id="cartItems"></div>
-        <div class="cart-total" id="cartTotal">Total: 0 FCFA</div>
-        <button class="cart-checkout" onclick="checkout()">
-            <i class="fas fa-credit-card"></i> Payer par Mobile Money
-        </button>
-        <button class="cart-checkout-whatsapp" onclick="checkoutWhatsApp()">
-            <i class="fab fa-whatsapp"></i> Commander via WhatsApp
-        </button>
+      </div>
+      <div class="steps">
+        <div class="step-row"><div class="step-n" id="s1">1</div><div class="step-t"><strong>Envoyez le montant exact</strong> au numéro choisi via MTN ou Orange Money.</div></div>
+        <div class="step-row"><div class="step-n" id="s2">2</div><div class="step-t"><strong>Notez votre référence</strong> de transaction (ex : TXN-XXXXXXX).</div></div>
+        <div class="step-row"><div class="step-n" id="s3">3</div><div class="step-t"><strong>Envoyez la preuve</strong> (capture ou référence) sur WhatsApp.</div></div>
+        <div class="step-row"><div class="step-n" id="s4">4</div><div class="step-t">Abonnement <strong>activé en quelques minutes</strong> ⚡</div></div>
+      </div>
+      <a class="wa-confirm-btn" id="modalWaBtn" href="#" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Confirmer sur WhatsApp
+      </a>
+      <p class="modal-note">📲 Envoyez votre preuve pour activer votre accès immédiatement</p>
     </div>
+  </div>
+</div>
 
-    <!-- ===== TOAST ===== -->
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Copié !</span>
+<!-- FLOAT WA -->
+<a class="wa-float" href="https://wa.me/237695956018?text=Bonjour%20NEOFLIX%20%F0%9F%91%8B%20je%20suis%20int%C3%A9ress%C3%A9%20par%20un%20abonnement%20!" target="_blank">
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="wa-label">Nous contacter</span>
+</a>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">NEOFLIX</div>
+  <p class="site-tagline">Votre passeport premium vers 4 univers de streaming</p>
+  <nav class="nav-pills">
+    <a href="#netflix" class="nav-pill pill-n">🎬 Netflix</a>
+    <a href="#prime" class="nav-pill pill-p">📦 Prime Vidéo</a>
+    <a href="#crunchyroll" class="nav-pill pill-c">⛩️ Crunchyroll</a>
+    <a href="#spotify" class="nav-pill pill-s">🎵 Spotify</a>
+  </nav>
+</header>
+
+<!-- ══════════════ NETFLIX ══════════════ -->
+<section class="platform-section" id="netflix">
+  <div class="platform-hero">
+    <div class="platform-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=1400&q=80&fit=crop')"></div>
+    <div class="platform-hero-overlay overlay-netflix"></div>
+    <div class="platform-hero-content">
+      <div class="platform-logo-badge badge-n"><span class="badge-dot" style="background:#E50914"></span>Netflix</div>
+      <h2 class="platform-title">Séries & Films <span style="color:#E50914">Sans Limites</span></h2>
+      <p class="platform-subtitle">Accès complet au catalogue Netflix — films, séries, documentaires</p>
     </div>
+  </div>
+  <div class="platform-cards">
+    <div class="pcard theme-n">
+      <div class="pcard-glow glow-n"></div>
+      <div class="pcard-dur">1 Mois</div>
+      <div class="pcard-price"><span class="pcard-amount">2 500</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">30 jours d'accès</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-n">✓</div>Catalogue complet Netflix</div>
+        <div class="pfeature"><div class="pf-check check-n">✓</div>HD & 4K disponible</div>
+        <div class="pfeature"><div class="pf-check check-n">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-n" onclick="openModal('netflix','Netflix','🎬','1 Mois','2 500 FCFA','2500')">💳 Payer maintenant</button>
+    </div>
+    <div class="pcard theme-n featured">
+      <div class="pcard-glow glow-n"></div>
+      <div class="featured-tag ftag-n">⭐ Populaire</div>
+      <div class="pcard-dur">3 Mois</div>
+      <div class="pcard-price"><span class="pcard-amount">6 500</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
+      <div class="pcard-saving">Économisez 13%</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-n">✓</div>Catalogue complet Netflix</div>
+        <div class="pfeature"><div class="pf-check check-n">✓</div>HD & 4K disponible</div>
+        <div class="pfeature"><div class="pf-check check-n">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-n" onclick="openModal('netflix','Netflix','🎬','3 Mois','6 500 FCFA','6500')">💳 Payer maintenant</button>
+    </div>
+    <div class="pcard theme-n">
+      <div class="pcard-glow glow-n"></div>
+      <div class="pcard-dur">6 Mois</div>
+      <div class="pcard-price"><span class="pcard-amount">13 000</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
+      <div class="pcard-saving">Économisez 13%</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-n">✓</div>Catalogue complet Netflix</div>
+        <div class="pfeature"><div class="pf-check check-n">✓</div>HD & 4K disponible</div>
+        <div class="pfeature"><div class="pf-check check-n">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-n" onclick="openModal('netflix','Netflix','🎬','6 Mois','13 000 FCFA','13000')">💳 Payer maintenant</button>
+    </div>
+    <div class="pcard theme-n">
+      <div class="pcard-glow glow-n"></div>
+      <div class="featured-tag ftag-gold">🏆 Meilleure offre</div>
+      <div class="pcard-dur">1 An</div>
+      <div class="pcard-price"><span class="pcard-amount">25 000</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">≈ 2 083 FCFA / mois</div>
+      <div class="pcard-saving">Économisez 17%</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-n">✓</div>Catalogue complet Netflix</div>
+        <div class="pfeature"><div class="pf-check check-n">✓</div>HD & 4K disponible</div>
+        <div class="pfeature"><div class="pf-check check-n">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-n" onclick="openModal('netflix','Netflix','🎬','1 An','25 000 FCFA','25000')">💳 Payer maintenant</button>
+    </div>
+  </div>
+  <!-- FAQ NETFLIX -->
+  <div class="faq-section">
+    <div class="faq-title" style="color:#E50914"><span style="background:#E50914"></span>Questions fréquentes — Netflix</div>
+    <div class="faq-item" style="--faq-color:rgba(229,9,20,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Combien d'écrans puis-je utiliser simultanément ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Avec notre abonnement Netflix, vous pouvez regarder sur <strong>plusieurs écrans</strong> en même temps selon le profil fourni. Nous vous précisons le nombre exact lors de l'activation.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(229,9,20,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Est-ce que je peux regarder en 4K avec Netflix ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Oui ! Netflix propose du contenu en <strong>HD et 4K Ultra HD</strong> selon votre appareil et votre connexion internet. La qualité s'adapte automatiquement.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(229,9,20,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Puis-je télécharger des séries pour regarder hors connexion ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Oui, Netflix permet de <strong>télécharger des épisodes et films</strong> pour les regarder sans internet, idéal en voyage ou zone à faible connexion.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(229,9,20,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Sur quels appareils puis-je utiliser Netflix ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Netflix fonctionne sur <strong>smartphones, tablettes, Smart TV, ordinateurs, consoles de jeux</strong> (PlayStation, Xbox) et les clés TV comme Chromecast ou Fire Stick.</div></div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        // ======================================================
-        // 1. DATA
-        // ======================================================
-        const products = [
-            { id: 1, name: 'iPhone 16 Pro Max', brand: 'iPhone', price: 1250000, img: '📱' },
-            { id: 2, name: 'iPhone 16 Pro', brand: 'iPhone', price: 1050000, img: '📱' },
-            { id: 3, name: 'iPhone 15 Pro Max', brand: 'iPhone', price: 900000, img: '📱' },
-            { id: 4, name: 'iPhone 15 Pro', brand: 'iPhone', price: 800000, img: '📱' },
-            { id: 5, name: 'iPhone 14 Pro Max', brand: 'iPhone', price: 700000, img: '📱' },
-            { id: 6, name: 'iPhone 13 Pro Max', brand: 'iPhone', price: 550000, img: '📱' },
-            { id: 7, name: 'iPhone 13', brand: 'iPhone', price: 420000, img: '📱' },
-            { id: 8, name: 'Samsung Galaxy S25 Ultra', brand: 'Samsung', price: 1100000, img: '📱' },
-            { id: 9, name: 'Samsung Galaxy S25+', brand: 'Samsung', price: 900000, img: '📱' },
-            { id: 10, name: 'Samsung Galaxy A56', brand: 'Samsung', price: 350000, img: '📱' },
-            { id: 11, name: 'Samsung Galaxy A36', brand: 'Samsung', price: 280000, img: '📱' },
-            { id: 12, name: 'Xiaomi 15 Ultra', brand: 'Xiaomi', price: 850000, img: '📱' },
-            { id: 13, name: 'Redmi Note 14 Pro', brand: 'Xiaomi', price: 280000, img: '📱' },
-            { id: 14, name: 'Poco X7 Pro', brand: 'Xiaomi', price: 350000, img: '📱' },
-            { id: 15, name: 'Tecno Phantom V Fold', brand: 'Tecno', price: 700000, img: '📱' },
-            { id: 16, name: 'Tecno Camon 40 Premier', brand: 'Tecno', price: 320000, img: '📱' },
-            { id: 17, name: 'Tecno Spark 30 Pro', brand: 'Tecno', price: 170000, img: '📱' },
-            { id: 18, name: 'Infinix Zero 40', brand: 'Infinix', price: 250000, img: '📱' },
-            { id: 19, name: 'Infinix Note 50 Pro', brand: 'Infinix', price: 220000, img: '📱' },
-            { id: 20, name: 'Infinix Smart 9', brand: 'Infinix', price: 110000, img: '📱' },
-        ];
+<div class="section-divider"></div>
 
-        const accessories = [
-            { name: 'AirPods Pro', price: 120000, icon: '🎧' },
-            { name: 'Apple Watch', price: 250000, icon: '⌚' },
-            { name: 'Chargeurs rapides', price: 15000, icon: '🔌' },
-            { name: 'Coques premium', price: 8000, icon: '📱' },
-            { name: 'Écouteurs Bluetooth', price: 25000, icon: '🎧' },
-            { name: 'Power Bank', price: 35000, icon: '🔋' },
-            { name: 'Verres trempés', price: 5000, icon: '🛡️' },
-        ];
+<!-- ══════════════ PRIME VIDEO ══════════════ -->
+<section class="platform-section" id="prime">
+  <div class="platform-hero">
+    <div class="platform-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1400&q=80&fit=crop')"></div>
+    <div class="platform-hero-overlay overlay-prime"></div>
+    <div class="platform-hero-content">
+      <div class="platform-logo-badge badge-p"><span class="badge-dot" style="background:#00A8E1"></span>Prime Vidéo</div>
+      <h2 class="platform-title">Originals <span style="color:#00A8E1">Amazon</span></h2>
+      <p class="platform-subtitle">Les meilleures productions Amazon et blockbusters exclusifs</p>
+    </div>
+  </div>
+  <div class="platform-cards">
+    <div class="pcard theme-p">
+      <div class="pcard-glow glow-p"></div>
+      <div class="pcard-dur">1 Mois</div>
+      <div class="pcard-price"><span class="pcard-amount">3 000</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">30 jours d'accès</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Originals Amazon inclus</div>
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Films & séries HD</div>
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-p" onclick="openModal('prime','Prime Vidéo','📦','1 Mois','3 000 FCFA','3000')">💶 Payer maintenant</button>
+    </div>
+    <div class="pcard theme-p featured">
+      <div class="pcard-glow glow-p"></div>
+      <div class="featured-tag ftag-p">⭐ Populaire</div>
+      <div class="pcard-dur">3 Mois</div>
+      <div class="pcard-price"><span class="pcard-amount">7 500</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
+      <div class="pcard-saving">Économisez 13%</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Originals Amazon inclus</div>
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Films & séries HD</div>
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-p" onclick="openModal('prime','Prime Vidéo','📦','3 Mois','7 500 FCFA','7500')">💶 Payer maintenant</button>
+    </div>
+    <div class="pcard theme-p">
+      <div class="pcard-glow glow-p"></div>
+      <div class="pcard-dur">6 Mois</div>
+      <div class="pcard-price"><span class="pcard-amount">13 000</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
+      <div class="pcard-saving">Économisez 13%</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Originals Amazon inclus</div>
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Films & séries HD</div>
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-p" onclick="openModal('prime','Prime Vidéo','📦','6 Mois','15 000 FCFA','15000')">💶 Payer maintenant</button>
+    </div>
+    <div class="pcard theme-p">
+      <div class="pcard-glow glow-p"></div>
+      <div class="featured-tag ftag-gold">🏆 Meilleure offre</div>
+      <div class="pcard-dur">1 An</div>
+      <div class="pcard-price"><span class="pcard-amount">30 000</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">≈ 2 083 FCFA / mois</div>
+      <div class="pcard-saving">Économisez 17%</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Originals Amazon inclus</div>
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Films & séries HD</div>
+        <div class="pfeature"><div class="pf-check check-p">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-p" onclick="openModal('prime','Prime Vidéo','📦','1 An','30 000 FCFA','30000')">💳 Payer maintenant</button>
+    </div>
+  </div>
+  <!-- FAQ PRIME -->
+  <div class="faq-section">
+    <div class="faq-title" style="color:#00A8E1"><span style="background:#00A8E1"></span>Questions fréquentes — Prime Vidéo</div>
+    <div class="faq-item" style="--faq-color:rgba(0,168,225,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Qu'est-ce qu'un Amazon Original ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Les <strong>Amazon Originals</strong> sont des séries et films produits exclusivement par Amazon, comme The Boys, Reacher, ou The Rings of Power. Ils ne sont disponibles que sur Prime Vidéo.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(0,168,225,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Prime Vidéo est-il disponible en Afrique ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Oui ! Prime Vidéo est <strong>accessible depuis le Cameroun et toute l'Afrique</strong> via notre abonnement NEOFLIX. Vous profitez du catalogue international sans restriction.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(0,168,225,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Puis-je regarder les matchs de sport sur Prime Vidéo ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Prime Vidéo propose certains <strong>événements sportifs en direct</strong>, notamment la NFL, la Ligue des Champions UEFA et des matchs de tennis Grand Chelem selon les régions.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(0,168,225,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Combien de personnes peuvent regarder en même temps ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Prime Vidéo permet jusqu'à <strong>3 flux simultanés</strong> sur un même compte, idéal pour toute la famille. Nous vous communiquons les détails lors de l'activation.</div></div>
+    </div>
+  </div>
+</section>
 
-        // ======================================================
-        // 2. STATE
-        // ======================================================
-        let cart = [];
-        let favorites = new Set();
-        let currentTheme = localStorage.getItem('theme') || 'light';
+<div class="section-divider"></div>
 
-        // ======================================================
-        // 3. THEME
-        // ======================================================
-        function toggleTheme() {
-            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            localStorage.setItem('theme', currentTheme);
-            const icon = document.getElementById('themeIcon');
-            icon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-        }
+<!-- ══════════════ CRUNCHYROLL ══════════════ -->
+<section class="platform-section" id="crunchyroll">
+  <div class="platform-hero">
+    <div class="platform-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1400&q=80&fit=crop')"></div>
+    <div class="platform-hero-overlay overlay-crunchyroll"></div>
+    <div class="platform-hero-content">
+      <div class="platform-logo-badge badge-c"><span class="badge-dot" style="background:#FF6D00"></span>Crunchyroll</div>
+      <h2 class="platform-title">Anime <span style="color:#FF6D00">Premium</span></h2>
+      <p class="platform-subtitle">Le meilleur de l'animation japonaise — simulcast & catalogue exclusif</p>
+    </div>
+  </div>
+  <div class="platform-cards">
+    <div class="pcard theme-c">
+      <div class="pcard-glow glow-c"></div>
+      <div class="pcard-dur">1 Mois</div>
+      <div class="pcard-price"><span class="pcard-amount">3 000</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">30 jours d'accès</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Catalogue anime complet</div>
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Simulcast (dès la sortie)</div>
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-c" onclick="openModal('crunchyroll','Crunchyroll','⛩️','1 Mois','3 000 FCFA','3000')">💶 Payer maintenant</button>
+    </div>
+    <div class="pcard theme-c featured">
+      <div class="pcard-glow glow-c"></div>
+      <div class="featured-tag ftag-c">⭐ Populaire</div>
+      <div class="pcard-dur">3 Mois</div>
+      <div class="pcard-price"><span class="pcard-amount">7 500</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
+      <div class="pcard-saving">Économisez 13%</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Catalogue anime complet</div>
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Simulcast (dès la sortie)</div>
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-c" onclick="openModal('crunchyroll','Crunchyroll','⛩️','3 Mois','7 500 FCFA','7500')">💶 Payer maintenant</button>
+    </div>
+    <div class="pcard theme-c">
+      <div class="pcard-glow glow-c"></div>
+      <div class="pcard-dur">6 Mois</div>
+      <div class="pcard-price"><span class="pcard-amount">15 000</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">≈ 2 167 FCFA / mois</div>
+      <div class="pcard-saving">Économisez 13%</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Catalogue anime complet</div>
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Simulcast (dès la sortie)</div>
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-c" onclick="openModal('crunchyroll','Crunchyroll','⛩️','6 Mois','15 000 FCFA','15000')">💶 Payer maintenant</button>
+    </div>
+    <div class="pcard theme-c">
+      <div class="pcard-glow glow-c"></div>
+      <div class="featured-tag ftag-gold">🏆 Meilleure offre</div>
+      <div class="pcard-dur">1 An</div>
+      <div class="pcard-price"><span class="pcard-amount">25 000</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">≈ 2 083 FCFA / mois</div>
+      <div class="pcard-saving">Économisez 17%</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Catalogue anime complet</div>
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Simulcast (dès la sortie)</div>
+        <div class="pfeature"><div class="pf-check check-c">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-c" onclick="openModal('crunchyroll','Crunchyroll','⛩️','1 An','25 000 FCFA','25000')">💶 Payer maintenant</button>
+    </div>
+  </div>
+  <!-- FAQ CRUNCHYROLL -->
+  <div class="faq-section">
+    <div class="faq-title" style="color:#FF6D00"><span style="background:#FF6D00"></span>Questions fréquentes — Crunchyroll</div>
+    <div class="faq-item" style="--faq-color:rgba(255,109,0,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Qu'est-ce que le simulcast sur Crunchyroll ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Le <strong>simulcast</strong> signifie que les épisodes d'anime sont disponibles sur Crunchyroll <strong>quelques heures après leur diffusion au Japon</strong>, souvent avec sous-titres en français.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(255,109,0,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Les animes sont-ils disponibles en français ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Oui ! Crunchyroll propose de nombreux animes avec des <strong>sous-titres en français</strong> et certains en <strong>doublage français (VOSTFR/VF)</strong>. Le catalogue en français s'agrandit chaque saison.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(255,109,0,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Combien d'animes sont disponibles sur Crunchyroll ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Crunchyroll possède la <strong>plus grande bibliothèque d'anime au monde</strong> avec plus de <strong>1 000 séries et 45 000 épisodes</strong>, des classiques aux nouvelles sorties chaque saison.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(255,109,0,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Puis-je regarder Crunchyroll sur ma télévision ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Absolument ! Crunchyroll est disponible sur <strong>Smart TV, Chromecast, Fire Stick, Apple TV, PlayStation et Xbox</strong>, en plus des smartphones, tablettes et PC.</div></div>
+    </div>
+  </div>
+</section>
 
-        function initTheme() {
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            const icon = document.getElementById('themeIcon');
-            icon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-        }
+<div class="section-divider"></div>
 
-        // ======================================================
-        // 4. TOAST
-        // ======================================================
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
+<!-- ══════════════ SPOTIFY ══════════════ -->
+<section class="platform-section" id="spotify">
+  <div class="platform-hero">
+    <div class="platform-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1614680376739-414d95ff43df?w=1400&q=80&fit=crop')"></div>
+    <div class="platform-hero-overlay overlay-spotify"></div>
+    <div class="platform-hero-content">
+      <div class="platform-logo-badge badge-s"><span class="badge-dot" style="background:#1DB954"></span>Spotify</div>
+      <h2 class="platform-title">Musique <span style="color:#1DB954">Sans Pub</span></h2>
+      <p class="platform-subtitle">100 millions de titres, podcasts et playlists — sans interruption</p>
+    </div>
+  </div>
+  <div class="platform-cards three-cols">
+    <div class="pcard theme-s">
+      <div class="pcard-glow glow-s"></div>
+      <div class="pcard-dur">1 Mois</div>
+      <div class="pcard-price"><span class="pcard-amount">3 000</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">30 jours d'accès</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-s">✓</div>100M+ titres sans pub</div>
+        <div class="pfeature"><div class="pf-check check-s">✓</div>Écoute hors connexion</div>
+        <div class="pfeature"><div class="pf-check check-s">✓</div>Qualité audio premium</div>
+        <div class="pfeature"><div class="pf-check check-s">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-s" onclick="openModal('spotify','Spotify','🎵','1 Mois','3 000 FCFA','3000')">💶 Payer maintenant</button>
+    </div>
+    <div class="pcard theme-s featured">
+      <div class="pcard-glow glow-s"></div>
+      <div class="featured-tag ftag-s">⭐ Populaire</div>
+      <div class="pcard-dur">6 Mois</div>
+      <div class="pcard-price"><span class="pcard-amount">15 000</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">≈ 2 500 FCFA / mois</div>
+      <div class="pcard-saving">Économisez 17%</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-s">✓</div>100M+ titres sans pub</div>
+        <div class="pfeature"><div class="pf-check check-s">✓</div>Écoute hors connexion</div>
+        <div class="pfeature"><div class="pf-check check-s">✓</div>Qualité audio premium</div>
+        <div class="pfeature"><div class="pf-check check-s">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-s" onclick="openModal('spotify','Spotify','🎵','6 Mois','15 000 FCFA','15000')">💶 Payer maintenant</button>
+    </div>
+    <div class="pcard theme-s">
+      <div class="pcard-glow glow-s"></div>
+      <div class="featured-tag ftag-gold">🏆 Meilleure offre</div>
+      <div class="pcard-dur">1 An</div>
+      <div class="pcard-price"><span class="pcard-amount">30 000</span><span class="pcard-unit">FCFA</span></div>
+      <div class="pcard-monthly">≈ 2 500 FCFA / mois</div>
+      <div class="pcard-saving">Économisez 17%</div>
+      <div class="pcard-features">
+        <div class="pfeature"><div class="pf-check check-s">✓</div>100M+ titres sans pub</div>
+        <div class="pfeature"><div class="pf-check check-s">✓</div>Écoute hors connexion</div>
+        <div class="pfeature"><div class="pf-check check-s">✓</div>Qualité audio premium</div>
+        <div class="pfeature"><div class="pf-check check-s">✓</div>Activation immédiate</div>
+      </div>
+      <button class="pcta btn-s" onclick="openModal('spotify','Spotify','🎵','1 An','30 000 FCFA','30000')">💶 Payer maintenant</button>
+    </div>
+  </div>
+  <!-- FAQ SPOTIFY -->
+  <div class="faq-section">
+    <div class="faq-title" style="color:#1DB954"><span style="background:#1DB954"></span>Questions fréquentes — Spotify</div>
+    <div class="faq-item" style="--faq-color:rgba(29,185,84,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Spotify Premium supprime-t-il toutes les publicités ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Oui ! Avec Spotify Premium, vous écoutez de la musique <strong>sans aucune interruption publicitaire</strong>, que ce soit entre les chansons ou les podcasts.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(29,185,84,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Puis-je télécharger de la musique pour écouter sans internet ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Absolument ! Spotify Premium vous permet de <strong>télécharger jusqu'à 10 000 titres</strong> sur 5 appareils différents pour une écoute hors ligne totale.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(29,185,84,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Quelle est la qualité audio de Spotify Premium ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Spotify Premium offre une qualité audio allant jusqu'à <strong>320 kbps</strong>, bien supérieure à la version gratuite. Vous profitez aussi de l'audio spatial et Dolby Atmos sur certains titres.</div></div>
+    </div>
+    <div class="faq-item" style="--faq-color:rgba(29,185,84,.4)">
+      <div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Combien d'appareils puis-je utiliser avec Spotify ?</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Vous pouvez installer Spotify sur <strong>autant d'appareils que vous voulez</strong>, mais l'écoute active n'est possible que sur un seul appareil à la fois. Le téléchargement hors ligne fonctionne sur jusqu'à 5 appareils.</div></div>
+    </div>
+  </div>
+</section>
 
-        // ======================================================
-        // 5. COPY NUMBER
-        // ======================================================
-        function copyNumber(number, label) {
-            navigator.clipboard.writeText(number).then(() => {
-                showToast(`✅ ${label} : ${number} copié !`);
-            }).catch(() => {
-                // Fallback
-                const input = document.createElement('input');
-                input.value = number;
-                document.body.appendChild(input);
-                input.select();
-                document.execCommand('copy');
-                document.body.removeChild(input);
-                showToast(`✅ ${label} : ${number} copié !`);
-            });
-        }
+<div class="section-divider"></div>
 
-        // ======================================================
-        // 6. RENDER PRODUCTS
-        // ======================================================
-        function renderProducts(filter = 'all') {
-            const grid = document.getElementById('productGrid');
-            const filtered = filter === 'all' ? products : products.filter(p => p.brand === filter);
-            grid.innerHTML = filtered.map(p => `
-                    <div class="product-card" data-id="${p.id}">
-                        <div class="favorite ${favorites.has(p.id) ? 'active' : ''}" onclick="toggleFavorite(${p.id})">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <div class="product-img">
-                            <span style="font-size:72px;">${p.img}</span>
-                        </div>
-                        <span class="brand-tag">${p.brand}</span>
-                        <h3>${p.name}</h3>
-                        <div class="price">${p.price.toLocaleString()} <small>FCFA</small></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary" onclick="addToCart(${p.id})">
-                                <i class="fas fa-shopping-bag"></i> Commander
-                            </button>
-                            <button class="btn btn-whatsapp" onclick="whatsappOrder('${p.name}', ${p.price})">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
-        }
+<!-- INFO -->
+<div class="info-section">
+  <div class="info-grid">
+    <div class="info-box"><div class="icon">🟡</div><h4>MTN Mobile Money</h4><p>Envoyez au <strong style="color:#FFCC00">+237 682 470 908</strong><br>Nom : AbIHEINDJOL FREYD</p></div>
+    <div class="info-box"><div class="icon">🟠</div><h4>Orange Money</h4><p>Envoyez au <strong style="color:#FF6600">+237 695 956 018</strong><br>Nom : ABIHEINDJOL FREYD</p></div>
+    <div class="info-box"><div class="icon">⚡</div><h4>Activation rapide</h4><p>Activé en quelques minutes après confirmation de votre paiement.</p></div>
+    <div class="info-box"><div class="icon">💬</div><h4>Support 7j/7</h4><p>Envoyez votre preuve de paiement sur WhatsApp pour validation.</p></div>
+  </div>
+</div>
 
-        // ======================================================
-        // 7. FILTERS
-        // ======================================================
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                renderProducts(this.dataset.brand);
-            });
-        });
+<footer>
+  <div class="footer-logo">NEOFLIX</div>
+  <p>© 2026 NEOFLIX-Coeurtys · Streaming sans frontières · Tous droits réservés</p>
+  <p style="margin-top:6px">📱 <a href="https://wa.me/237695956018" target="_blank">+237 695 956 018</a></p>
+</footer>
 
-        // ======================================================
-        // 8. FAVORITES
-        // ======================================================
-        function toggleFavorite(id) {
-            if (favorites.has(id)) favorites.delete(id);
-            else favorites.add(id);
-            renderProducts(document.querySelector('.filter-btn.active')?.dataset.brand || 'all');
-        }
+<script>
+  const PLATFORMS = {
+    netflix:     {color:'#E50914', glow:'rgba(229,9,20,0.18)',    stepBg:'#E50914', nameStyle:'color:#FF5C67;border-color:rgba(229,9,20,0.5);background:rgba(229,9,20,0.12)'},
+    prime:       {color:'#00A8E1', glow:'rgba(0,168,225,0.18)',   stepBg:'#00A8E1', nameStyle:'color:#29C4F6;border-color:rgba(0,168,225,0.5);background:rgba(0,168,225,0.12)'},
+    crunchyroll: {color:'#FF6D00', glow:'rgba(255,109,0,0.18)',   stepBg:'#FF6D00', nameStyle:'color:#FF8C00;border-color:rgba(255,109,0,0.5);background:rgba(255,109,0,0.12)'},
+    spotify:     {color:'#1DB954', glow:'rgba(29,185,84,0.18)',   stepBg:'#1DB954', nameStyle:'color:#1DB954;border-color:rgba(29,185,84,0.5);background:rgba(29,185,84,0.12)'}
+  };
 
-        // ======================================================
-        // 9. CART
-        // ======================================================
-        function addToCart(id) {
-            const p = products.find(prod => prod.id === id);
-            if (!p) return;
-            const existing = cart.find(item => item.id === id);
-            if (existing) {
-                existing.qty += 1;
-            } else {
-                cart.push({ ...p, qty: 1 });
-            }
-            updateCartUI();
-            showToast(`✅ ${p.name} ajouté au panier`);
-        }
+  let currentAmount='', currentPlatform='', currentDuration='', currentPrice='';
 
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
-            updateCartUI();
-        }
+  function openModal(key, name, icon, duration, price, amount) {
+    const cfg = PLATFORMS[key];
+    currentAmount=amount; currentPlatform=name; currentDuration=duration; currentPrice=price;
+    const top = document.getElementById('modalTop');
+    top.style.setProperty('--modal-color', cfg.color);
+    top.style.setProperty('--modal-glow', cfg.glow);
+    document.getElementById('tabMTN').style.setProperty('--tab-color','#FFCC00');
+    document.getElementById('tabMTN').style.setProperty('--tab-bg','rgba(255,204,0,0.1)');
+    document.getElementById('tabMTN').style.setProperty('--tab-shadow','rgba(255,204,0,0.2)');
+    document.getElementById('tabOrange').style.setProperty('--tab-color','#FF6600');
+    document.getElementById('tabOrange').style.setProperty('--tab-bg','rgba(255,102,0,0.1)');
+    document.getElementById('tabOrange').style.setProperty('--tab-shadow','rgba(255,102,0,0.2)');
+    document.getElementById('modalIcon').textContent = icon;
+    const nameEl = document.getElementById('modalPlatformName');
+    nameEl.textContent = name; nameEl.style.cssText = cfg.nameStyle;
+    document.getElementById('modalPriceDisplay').innerHTML = price.replace(' FCFA','') + '<sup>FCFA</sup>';
+    document.getElementById('modalDurationPill').textContent = '📅 ' + duration;
+    document.getElementById('mtnAmount').textContent = price;
+    document.getElementById('orangeAmount').textContent = price;
+    // Codes USSD dynamiques
+    document.getElementById('mtnUssd').textContent   = '*126*1*1*682470908*' + amount + '#';
+    document.getElementById('orangeUssd').textContent = '#150*1*1*695956018*' + amount + '#';
+    ['s1','s2','s3','s4'].forEach(id=>{
+      document.getElementById(id).style.background = cfg.stepBg;
+      document.getElementById(id).style.color = '#fff';
+    });
+    const msg = encodeURIComponent('Bonjour NEOFLIX 👋\n\nJe viens d\'effectuer mon paiement :\n📺 Plateforme : '+name+'\n📅 Durée : '+duration+'\n💰 Montant : '+price+'\n\nCi-joint ma preuve de paiement. Merci d\'activer mon accès ! 🙏');
+    document.getElementById('modalWaBtn').href = 'https://wa.me/237695956018?text=' + msg;
+    document.getElementById('payModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    selectMethod('mtn');
+  }
 
-        function changeQty(id, delta) {
-            const item = cart.find(i => i.id === id);
-            if (!item) return;
-            item.qty += delta;
-            if (item.qty <= 0) {
-                removeFromCart(id);
-                return;
-            }
-            updateCartUI();
-        }
+  function selectMethod(m) {
+    ['tabMTN','tabOrange'].forEach(id=>document.getElementById(id).classList.remove('active-tab'));
+    ['panelMTN','panelOrange'].forEach(id=>document.getElementById(id).classList.remove('visible'));
+    if(m==='mtn'){document.getElementById('tabMTN').classList.add('active-tab');document.getElementById('panelMTN').classList.add('visible');}
+    else{document.getElementById('tabOrange').classList.add('active-tab');document.getElementById('panelOrange').classList.add('visible');}
+  }
 
-        function updateCartUI() {
-            const count = cart.reduce((sum, i) => sum + i.qty, 0);
-            document.getElementById('cartCount').textContent = count;
+  function closeModal(){
+    document.getElementById('payModal').classList.remove('active');
+    document.body.style.overflow='';
+  }
 
-            const container = document.getElementById('cartItems');
-            if (cart.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:40px 0;">Votre panier est vide.</p>';
-                document.getElementById('cartTotal').textContent = 'Total: 0 FCFA';
-                return;
-            }
-            container.innerHTML = cart.map(item => `
-                    <div class="cart-item">
-                        <div>
-                            <strong>${item.name}</strong>
-                            <div>${item.price.toLocaleString()} FCFA</div>
-                        </div>
-                        <div class="qty">
-                            <button onclick="changeQty(${item.id}, -1)">−</button>
-                            <span>${item.qty}</span>
-                            <button onclick="changeQty(${item.id}, 1)">+</button>
-                            <button onclick="removeFromCart(${item.id})" style="background:none;border:none;color:#ff3b30;font-size:18px;">✕</button>
-                        </div>
-                    </div>
-                `).join('');
+  document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 
-            const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-            document.getElementById('cartTotal').textContent = `Total: ${total.toLocaleString()} FCFA`;
-        }
+  function copyText(t,label){navigator.clipboard.writeText('+'+t).then(()=>showToast('✅ '+label+' copié !'))}
+  function copyAmount(){navigator.clipboard.writeText(currentAmount).then(()=>showToast('✅ Montant '+currentPrice+' copié !'))}
+  function copyUssd(type){
+    const code = type==='mtn'
+      ? '*126*1*1*682470908*'+currentAmount+'#'
+      : '#150*1*1*695956018*'+currentAmount+'#';
+    navigator.clipboard.writeText(code).then(()=>showToast('✅ Code USSD copié !'));
+  }
 
-        function toggleCart() {
-            document.getElementById('cartOverlay').classList.toggle('open');
-            document.getElementById('cartSidebar').classList.toggle('open');
-        }
+  function showToast(msg){
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2500);
+  }
 
-        // ======================================================
-        // 10. CHECKOUT
-        // ======================================================
-        function getCartMessage() {
-            if (cart.length === 0) return null;
-            const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-            const items = cart.map(i =>
-                `• ${i.name} x${i.qty} = ${(i.price * i.qty).toLocaleString()} FCFA`
-            ).join('%0A');
-            return {
-                message: `Bonjour APPLE STAR, je souhaite commander ces articles :%0A${items}%0A%0ATotal : ${total.toLocaleString()} FCFA%0A%0AMéthode de paiement : `,
-                total: total
-            };
-        }
-
-        function checkout() {
-            const data = getCartMessage();
-            if (!data) return alert('Votre panier est vide.');
-            const choice = confirm(
-                `💰 Total : ${data.total.toLocaleString()} FCFA\n\nChoisissez votre méthode de paiement :\n• OK → Paiement Mobile Money\n• Annuler → WhatsApp`
-            );
-            if (choice) {
-                // Mobile Money
-                const method = confirm(
-                    `Choisissez votre opérateur :\n• OK → Orange Money (695 956 018)\n• Annuler → MTN Mobile Money (682 470 908)`
-                );
-                const number = method ? '695956018' : '682470908';
-                const operator = method ? 'Orange Money' : 'MTN Mobile Money';
-                alert(
-                    `📱 Paiement ${operator}\nNuméro : ${number}\nMontant : ${data.total.toLocaleString()} FCFA\n\n1. Effectuez le transfert\n2. Envoyez le reçu sur WhatsApp\n3. Nous traitons votre commande`
-                );
-                const msg = data.message + `${operator} (${number})`;
-                window.open(`https://wa.me/237695956018?text=${msg}`, '_blank');
-            } else {
-                checkoutWhatsApp();
-            }
-        }
-
-        function checkoutWhatsApp() {
-            const data = getCartMessage();
-            if (!data) return alert('Votre panier est vide.');
-            const msg = data.message + 'WhatsApp';
-            window.open(`https://wa.me/237695956018?text=${msg}`, '_blank');
-        }
-
-        function whatsappOrder(name, price) {
-            const msg =
-                `Bonjour APPLE STAR, je souhaite commander ce téléphone : ${name} (${price.toLocaleString()} FCFA)`;
-            window.open(`https://wa.me/237695956018?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        // ======================================================
-        // 11. ACCESSORIES
-        // ======================================================
-        function renderAccessories() {
-            const grid = document.getElementById('accessoryGrid');
-            grid.innerHTML = accessories.map(a => `
-                    <div class="accessory-card">
-                        <div style="font-size:48px;">${a.icon}</div>
-                        <h4>${a.name}</h4>
-                        <div class="price">${a.price.toLocaleString()} FCFA</div>
-                        <button class="btn btn-primary" style="padding:8px 20px;font-size:13px;width:100%;" onclick="whatsappOrder('${a.name}', ${a.price})">
-                            <i class="fab fa-whatsapp"></i> Commander
-                        </button>
-                    </div>
-                `).join('');
-        }
-
-        // ======================================================
-        // 12. BACK TO TOP
-        // ======================================================
-        const backTop = document.getElementById('backTop');
-        window.addEventListener('scroll', () => {
-            backTop.classList.toggle('visible', window.scrollY > 400);
-        });
-        backTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // ======================================================
-        // 13. MOBILE MENU
-        // ======================================================
-        function toggleMobileMenu() {
-            document.getElementById('navLinks').classList.toggle('open');
-        }
-
-        // ======================================================
-        // 14. HEADER SHADOW
-        // ======================================================
-        window.addEventListener('scroll', () => {
-            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
-        });
-
-        // ======================================================
-        // 15. INIT
-        // ======================================================
-        initTheme();
-        renderProducts();
-        renderAccessories();
-        updateCartUI();
-
-        console.log('🚀 APPLE STAR — Boutique premium à Bertoua');
-        console.log('📞 WhatsApp: +237695956018');
-        console.log('🟧 Orange Money: 695956018');
-        console.log('🟨 MTN Mobile Money: 682470908');
-    </script>
-
+  function toggleFaq(el){
+    const item = el.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+    if(!isOpen) item.classList.add('open');
+  }
+</script>
 </body>
 </html>
