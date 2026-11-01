@@ -1,490 +1,183 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ONE STREAM — Abonnements Netflix, Prime Video & Crunchyroll</title>
-<meta name="description" content="Abonnements Netflix, Prime Video et Crunchyroll au meilleur prix. Commande simple et rapide sur WhatsApp.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pour toi, de la part de Freyd</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap">
 <style>
-  :root{
-    --bg:#07090D; --bg-alt:#0D1017; --card:#12151C; --card-alt:#161A23;
-    --line:#232733; --text:#F2F3F6; --muted:#9099AC;
-    --gold:#E8B54A; --gold-dim:#8a692b;
-    --netflix:#E1122E; --netflix-dim:#3a0810;
-    --prime:#1FA7DC; --prime-dim:#0b2c3a;
-    --crunchy:#F97316; --crunchy-dim:#3a1c05;
-    --whatsapp:#25D366;
-    --radius:16px;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:var(--bg); color:var(--text); font-family:'Manrope',sans-serif;
-    line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;
-  }
-  h1,h2,h3,.logo,.hero-eyebrow{ font-family:'Bebas Neue', sans-serif; letter-spacing:.5px; }
-  .mono{ font-family:'Space Mono', monospace; }
-  a{ color:inherit; text-decoration:none; }
-  ul{ list-style:none; }
-  img{ max-width:100%; display:block; }
-  button{ font-family:inherit; cursor:pointer; border:none; }
-  .wrap{ max-width:1180px; margin:0 auto; padding:0 24px; }
-  section{ padding:100px 0; position:relative; }
-  .eyebrow{
-    display:inline-flex; align-items:center; gap:8px; font-family:'Space Mono',monospace;
-    font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--gold);
-    border:1px solid var(--gold-dim); padding:6px 14px; border-radius:999px; margin-bottom:18px;
-  }
-  .section-title{ font-size:44px; line-height:1.05; margin-bottom:14px; }
-  .section-sub{ color:var(--muted); font-size:16px; max-width:60ch; margin-bottom:40px; }
-  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
-  .reveal.in{ opacity:1; transform:translateY(0); }
-
-  /* ===== HEADER ===== */
-  header{
-    position:fixed; top:0; left:0; right:0; z-index:200;
-    background:rgba(7,9,13,.75); backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--line);
-    transition:background .3s ease;
-  }
-  .nav-row{ display:flex; align-items:center; justify-content:space-between; padding:16px 24px; }
-  .logo{ font-size:26px; letter-spacing:1px; }
-  .logo span{ color:var(--gold); }
-  .nav-links{ display:flex; gap:30px; }
-  .nav-links a{
-    font-size:13.5px; font-weight:600; color:var(--muted); position:relative; padding:4px 0;
-    text-transform:uppercase; letter-spacing:.5px; transition:color .2s;
-  }
-  .nav-links a::after{
-    content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px; background:var(--gold);
-    transition:width .25s ease;
-  }
-  .nav-links a:hover{ color:var(--text); }
-  .nav-links a:hover::after{ width:100%; }
-  .nav-cta{
-    display:flex; align-items:center; gap:8px; background:var(--whatsapp); color:#04170B;
-    padding:10px 18px; border-radius:999px; font-weight:700; font-size:13.5px;
-    transition:transform .2s, box-shadow .2s;
-  }
-  .nav-cta:hover{ transform:translateY(-2px); box-shadow:0 8px 22px rgba(37,211,102,.35); }
-  .burger{ display:none; width:36px; height:36px; flex-direction:column; justify-content:center; gap:5px; }
-  .burger span{ display:block; width:100%; height:2px; background:var(--text); }
-  .mobile-menu{
-    display:none; flex-direction:column; gap:2px; background:var(--bg-alt);
-    border-top:1px solid var(--line); padding:10px 24px 20px;
-  }
-  .mobile-menu.open{ display:flex; }
-  .mobile-menu a{ padding:12px 0; font-weight:600; font-size:15px; border-bottom:1px solid var(--line); }
-
-  /* ===== HERO ===== */
-  .hero{
-    min-height:100vh; display:flex; align-items:center; position:relative;
-    padding-top:120px;
-    background:
-      radial-gradient(ellipse 60% 50% at 15% 20%, rgba(225,18,46,.20), transparent 60%),
-      radial-gradient(ellipse 55% 45% at 85% 30%, rgba(31,167,220,.18), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 50% 90%, rgba(249,115,22,.14), transparent 60%),
-      var(--bg);
-    overflow:hidden;
-  }
-  .hero::before{
-    content:''; position:absolute; inset:0;
-    background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0px, rgba(255,255,255,.025) 1px, transparent 1px, transparent 3px);
-    pointer-events:none;
-  }
-  .hero-content{ position:relative; z-index:2; text-align:center; max-width:800px; margin:0 auto; }
-  .hero h1{ font-size:clamp(42px,7vw,78px); line-height:1.02; margin:14px 0 20px; }
-  .hero h1 .l1{ display:block; }
-  .hero h1 .accent{ color:var(--gold); }
-  .hero p.lead{ color:var(--muted); font-size:18px; max-width:52ch; margin:0 auto 34px; }
-  .hero-badges{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:38px; }
-  .platform-badge{
-    display:flex; align-items:center; gap:8px; padding:8px 16px; border-radius:999px;
-    border:1px solid var(--line); background:rgba(255,255,255,.03); font-size:13px; font-weight:600;
-  }
-  .dot{ width:8px; height:8px; border-radius:50%; }
-  .hero-cta{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
-  .btn{
-    display:inline-flex; align-items:center; gap:8px; padding:16px 30px; border-radius:12px;
-    font-weight:700; font-size:15px; transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
-  }
-  .btn-gold{ background:var(--gold); color:#1b1204; }
-  .btn-gold:hover{ transform:translateY(-3px); box-shadow:0 14px 30px rgba(232,181,74,.28); }
-  .btn-outline{ border:1px solid var(--line); background:rgba(255,255,255,.02); }
-  .btn-outline:hover{ border-color:var(--gold); transform:translateY(-3px); }
-  .scroll-cue{
-    position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
-    font-family:'Space Mono',monospace; font-size:11px; color:var(--muted);
-    display:flex; flex-direction:column; align-items:center; gap:8px; letter-spacing:2px;
-  }
-  .scroll-cue .line{ width:1px; height:34px; background:linear-gradient(var(--gold), transparent); animation:pulse 1.8s ease-in-out infinite; }
-  @keyframes pulse{ 0%,100%{opacity:.3;} 50%{opacity:1;} }
-
-  /* ===== PLATFORM SECTIONS ===== */
-  .platform-section{ overflow:hidden; }
-  .platform-inner{
-    display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
-  }
-  .platform-visual{
-    position:relative; height:420px; border-radius:24px; border:1px solid var(--line);
-    display:flex; align-items:center; justify-content:center; overflow:hidden;
-  }
-  .platform-visual .glyph{ font-family:'Bebas Neue',sans-serif; font-size:120px; opacity:.9; letter-spacing:2px; z-index:2; }
-  .platform-visual .ring{
-    position:absolute; border-radius:50%; border:1px solid; opacity:.35;
-  }
-  #netflix .platform-visual{ background:radial-gradient(circle at 30% 30%, rgba(225,18,46,.30), var(--netflix-dim) 70%); }
-  #netflix .glyph{ color:#fff; text-shadow:0 0 40px rgba(225,18,46,.6); }
-  #netflix .ring{ border-color:var(--netflix); }
-
-  #prime .platform-visual{ background:radial-gradient(circle at 70% 30%, rgba(31,167,220,.30), var(--prime-dim) 70%); }
-  #prime .glyph{ color:#fff; text-shadow:0 0 40px rgba(31,167,220,.6); }
-  #prime .ring{ border-color:var(--prime); }
-
-  #crunchy .platform-visual{ background:radial-gradient(circle at 30% 70%, rgba(249,115,22,.30), var(--crunchy-dim) 70%); }
-  #crunchy .glyph{ color:#fff; text-shadow:0 0 40px rgba(249,115,22,.6); }
-  #crunchy .ring{ border-color:var(--crunchy); }
-
-  .ring.r1{ width:180px; height:180px; }
-  .ring.r2{ width:280px; height:280px; }
-  .ring.r3{ width:380px; height:380px; }
-
-  .platform-copy .eyebrow{ margin-bottom:16px; }
-  .platform-copy h2{ font-size:46px; margin-bottom:16px; }
-  .platform-copy p{ color:var(--muted); font-size:15.5px; margin-bottom:26px; max-width:48ch; }
-  .feature-list{ display:flex; flex-direction:column; gap:10px; margin-bottom:30px; }
-  .feature-list li{ display:flex; align-items:center; gap:10px; font-size:14.5px; }
-  .feature-list .check{ width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; }
-
-  #netflix .feature-list .check{ background:rgba(225,18,46,.18); color:var(--netflix); }
-  #prime .feature-list .check{ background:rgba(31,167,220,.18); color:var(--prime); }
-  #crunchy .feature-list .check{ background:rgba(249,115,22,.18); color:var(--crunchy); }
-
-  .from-price{ font-family:'Space Mono',monospace; font-size:14px; color:var(--muted); margin-bottom:18px; }
-  .from-price strong{ color:var(--text); font-size:20px; }
-
-  @media (max-width:860px){
-    .platform-inner{ grid-template-columns:1fr; }
-    .platform-inner.reverse .platform-visual{ order:-1; }
-  }
-
-  /* ===== OFFRES (tabs + cards) ===== */
-  .offers-section{ background:var(--bg-alt); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
-  .tabs{ display:flex; justify-content:center; gap:10px; margin-bottom:48px; flex-wrap:wrap; }
-  .tab-btn{
-    padding:12px 24px; border-radius:999px; border:1px solid var(--line); background:var(--card);
-    font-weight:700; font-size:14px; color:var(--muted); transition:all .25s ease;
-    display:flex; align-items:center; gap:8px;
-  }
-  .tab-btn .dot{ width:9px; height:9px; }
-  .tab-btn.active{ color:#fff; border-color:transparent; }
-  .tab-btn[data-p="netflix"].active{ background:var(--netflix); }
-  .tab-btn[data-p="prime"].active{ background:var(--prime); }
-  .tab-btn[data-p="crunchy"].active{ background:var(--crunchy); }
-
-  .pricing-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
-  .price-card{
-    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:28px 22px; text-align:center; position:relative; transition:transform .25s ease, border-color .25s ease;
-  }
-  .price-card:hover{ transform:translateY(-8px); }
-  .price-card.featured{ border-width:2px; }
-  .price-card .tag{
-    position:absolute; top:-12px; left:50%; transform:translateX(-50%);
-    font-size:10.5px; font-weight:800; letter-spacing:1px; padding:5px 14px; border-radius:999px; color:#161200;
-    background:var(--gold);
-  }
-  .price-card .duration{ font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:1px; margin-bottom:10px; color:var(--muted); }
-  .price-card .price{ font-family:'Space Mono',monospace; font-size:30px; font-weight:700; margin-bottom:4px; }
-  .price-card .price small{ font-size:14px; color:var(--muted); font-weight:400; }
-  .price-card .per{ font-size:12px; color:var(--muted); margin-bottom:24px; }
-  .choose-btn{
-    width:100%; padding:13px; border-radius:10px; font-weight:700; font-size:14px; color:#fff;
-    transition:filter .2s ease, transform .2s ease;
-  }
-  .choose-btn:hover{ filter:brightness(1.12); transform:translateY(-2px); }
-
-  @media (max-width:900px){ .pricing-grid{ grid-template-columns:repeat(2,1fr); } }
-  @media (max-width:520px){ .pricing-grid{ grid-template-columns:1fr; } }
-
-  /* ===== COMMANDER ===== */
-  .steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
-  .step-card{
-    background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:26px 20px;
-    position:relative;
-  }
-  .step-num{
-    font-family:'Bebas Neue',sans-serif; font-size:44px; color:var(--gold-dim); line-height:1; margin-bottom:14px;
-  }
-  .step-card h3{ font-family:'Manrope',sans-serif; font-size:15.5px; font-weight:800; margin-bottom:8px; }
-  .step-card p{ color:var(--muted); font-size:13.5px; }
-  @media (max-width:860px){ .steps{ grid-template-columns:1fr 1fr; } }
-  @media (max-width:520px){ .steps{ grid-template-columns:1fr; } }
-
-  /* ===== CONTACT ===== */
-  .contact-box{
-    background:linear-gradient(135deg, rgba(232,181,74,.10), rgba(37,211,102,.08));
-    border:1px solid var(--line); border-radius:24px; padding:56px; text-align:center;
-  }
-  .contact-box h2{ font-size:38px; margin-bottom:14px; }
-  .contact-box p{ color:var(--muted); margin-bottom:30px; }
-  .phone-display{ font-family:'Space Mono',monospace; font-size:22px; color:var(--gold); margin-bottom:26px; letter-spacing:1px; }
-
-  /* ===== FOOTER ===== */
-  footer{ border-top:1px solid var(--line); padding:36px 0; text-align:center; color:var(--muted); font-size:13px; }
-  footer .logo{ font-size:20px; margin-bottom:10px; display:block; }
-
-  /* WhatsApp float */
-  .wa-float{
-    position:fixed; right:22px; bottom:22px; z-index:150; width:58px; height:58px; border-radius:50%;
-    background:var(--whatsapp); display:flex; align-items:center; justify-content:center; font-size:26px;
-    box-shadow:0 10px 24px rgba(37,211,102,.4); animation:float 3s ease-in-out infinite;
-  }
-  @keyframes float{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
-
-  @media (max-width:860px){
-    .nav-links{ display:none; }
-    .burger{ display:flex; }
-    .section-title{ font-size:32px; }
-    .contact-box{ padding:32px 20px; }
-  }
+:root{
+  --bg:#fbeff1; --bg2:#f4d3da; --ink:#4a1428; --soft:#8a4a60; --rose:#b8325a; --gold:#a8772f; --card:#fffafa; --line:#e9bfca;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#22091a;--bg2:#3a0f27;--ink:#fbe7ea;--soft:#d9a3b3;--rose:#ee7a9c;--gold:#d9b06a;--card:#2f1022;--line:#5a2640}
+}
+:root[data-theme="dark"]{--bg:#22091a;--bg2:#3a0f27;--ink:#fbe7ea;--soft:#d9a3b3;--rose:#ee7a9c;--gold:#d9b06a;--card:#2f1022;--line:#5a2640}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:radial-gradient(120% 90% at 50% 0%,var(--bg2),var(--bg) 70%);color:var(--ink);font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;font-size:21px;line-height:1.5;display:flex;align-items:center;justify-content:center;padding:24px 18px;overflow-x:hidden}
+main{width:100%;max-width:520px;text-align:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:40px 28px 34px;box-shadow:0 18px 50px rgba(120,20,60,.16)}
+.dots{display:flex;gap:8px;justify-content:center;margin-bottom:26px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line);transition:background .3s,transform .3s}
+.dots i.on{background:var(--rose);transform:scale(1.25)}
+.dots i.done{background:var(--gold)}
+h1{font-weight:600;font-style:italic;font-size:clamp(34px,9vw,46px);line-height:1.12;margin:0 0 14px;color:var(--rose)}
+h2{font-weight:600;font-size:clamp(27px,7vw,34px);line-height:1.2;margin:0 0 28px}
+p{margin:0 0 26px;color:var(--soft)}
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+button,.btn{font:inherit;font-weight:600;cursor:pointer;border-radius:999px;padding:12px 30px;border:1.5px solid var(--rose);text-decoration:none;display:inline-block;transition:transform .15s,background .2s}
+button:active,.btn:active{transform:scale(.97)}
+.yes,.btn{background:var(--rose);color:#fff}
+.no{background:transparent;color:var(--rose)}
+button:focus-visible,.btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.msg{min-height:1.5em;margin-top:22px;font-style:italic;color:var(--gold)}
+.sum{text-align:left;margin:0 0 26px;padding:0;list-style:none;font-size:18px}
+.sum li{padding:8px 0;border-bottom:1px solid var(--line)}
+.sum b{color:var(--rose)}
+.intro{text-align:center;padding-top:150px}
+.env{position:relative;width:min(320px,82vw);height:210px;margin:0 auto 34px;perspective:900px}
+.env .back{position:absolute;inset:0;background:var(--line);border-radius:10px;box-shadow:0 18px 40px rgba(120,20,60,.2)}
+.env .letter{position:absolute;left:9%;right:9%;top:10px;height:170px;background:var(--card);border:1px solid var(--line);border-radius:6px;z-index:2;display:flex;align-items:center;justify-content:center;font-style:italic;font-weight:600;font-size:28px;color:var(--rose);transition:transform 1s .6s ease}
+.env.open .letter{transform:translateY(-150px)}
+.env .pocket{position:absolute;inset:0;z-index:3;border-radius:10px;background:linear-gradient(var(--bg2),var(--line));clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%)}
+.env .flap{position:absolute;left:0;right:0;top:0;height:56%;z-index:4;background:linear-gradient(var(--line),var(--bg2));clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .7s ease}
+.env.open .flap{transform:rotateX(180deg);z-index:1}
+.env .seal{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);z-index:5;font-size:30px;transition:opacity .3s}
+.env.open .seal{opacity:0}
+textarea{width:100%;font:inherit;font-size:20px;min-height:110px;padding:12px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical;margin-bottom:18px}
+textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button:disabled{opacity:.6;cursor:default}
+.hide{display:none}
+.petal{position:fixed;top:-8vh;z-index:50;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){.petal{animation-duration:1.5s!important}}
 </style>
 </head>
 <body>
+<main>
+  <section class="intro" id="intro">
+    <div class="env" id="env" aria-hidden="true">
+      <div class="back"></div>
+      <div class="letter">Pour toi</div>
+      <div class="pocket"></div>
+      <div class="flap"></div>
+      <div class="seal">❤️</div>
+    </div>
+    <h1>Une lettre t’attend</h1>
+    <p>Ouvre-la et réponds avec ton cœur.</p>
+    <button class="yes" id="start">Commencer</button>
+  </section>
 
-<header id="siteHeader">
-  <div class="nav-row wrap">
-    <a href="#accueil" class="logo">ONE<span>STREAM</span></a>
-    <nav class="nav-links">
-      <a href="#accueil">Accueil</a>
-      <a href="#netflix">Netflix</a>
-      <a href="#prime">Prime Video</a>
-      <a href="#crunchy">Crunchyroll</a>
-      <a href="#offres">Nos offres</a>
-      <a href="#commander">Commander</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <a class="nav-cta" href="https://wa.me/237692946633" target="_blank">💬 WhatsApp</a>
-    <button class="burger" id="burgerBtn" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#accueil">Accueil</a>
-    <a href="#netflix">Netflix</a>
-    <a href="#prime">Prime Video</a>
-    <a href="#crunchy">Crunchyroll</a>
-    <a href="#offres">Nos offres</a>
-    <a href="#commander">Comment commander</a>
-    <a href="#contact">Contact</a>
-  </div>
-</header>
+  <section class="card hide" id="quiz" aria-live="polite">
+    <div class="dots" id="dots"></div>
+    <h2 id="q"></h2>
+    <div class="row" id="yn">
+      <button class="yes" id="bYes">Oui</button>
+      <button class="no" id="bNo">Non</button>
+    </div>
+    <div class="hide" id="txt">
+      <textarea id="ta" rows="4" placeholder="Écris ce que tu ressens…" aria-label="Ta réponse"></textarea>
+      <button class="yes" id="bNext">Envoyer ma réponse</button>
+    </div>
+    <div class="msg" id="msg"></div>
+  </section>
 
-<!-- ===== HERO ===== -->
-<section class="hero" id="accueil">
-  <div class="wrap hero-content">
-    <span class="eyebrow">★ Abonnements premium au meilleur prix</span>
-    <h1>
-      <span class="l1">Vos plateformes préférées,</span>
-      <span class="l1 accent">vos abonnements au meilleur prix.</span>
-    </h1>
-    <p class="lead">Netflix, Prime Video et Crunchyroll — commandez en toute simplicité et recevez votre accès directement via WhatsApp.</p>
-    <div class="hero-badges">
-      <div class="platform-badge"><span class="dot" style="background:var(--netflix)"></span> Netflix disponible</div>
-      <div class="platform-badge"><span class="dot" style="background:var(--prime)"></span> Prime Video disponible</div>
-      <div class="platform-badge"><span class="dot" style="background:var(--crunchy)"></span> Crunchyroll disponible</div>
+  <section class="card hide" id="end">
+    <h1>Merci, mon cœur</h1>
+    <p>Voici tes réponses. Appuie sur le bouton pour me les envoyer.</p>
+    <ul class="sum" id="sum"></ul>
+    <div class="row">
+      <a class="btn" id="mail" href="#">Envoyer mes réponses à Freyd</a>
+      <button class="no" id="copy">Copier mes réponses</button>
     </div>
-    <div class="hero-cta">
-      <a href="#offres" class="btn btn-gold">Découvrir les offres</a>
-      <a href="https://wa.me/237692946633" target="_blank" class="btn btn-outline">💬 Commander sur WhatsApp</a>
-    </div>
-  </div>
-  <div class="scroll-cue"><span>SCROLL</span><span class="line"></span></div>
-</section>
-
-<!-- ===== NETFLIX ===== -->
-<section class="platform-section" id="netflix">
-  <div class="wrap platform-inner reveal">
-    <div class="platform-visual">
-      <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
-      <div class="glyph">N</div>
-    </div>
-    <div class="platform-copy">
-      <span class="eyebrow" style="color:var(--netflix); border-color:var(--netflix)">Netflix</span>
-      <h2>Films, séries &amp; productions originales</h2>
-      <p>Le catalogue le plus riche du streaming : séries à succès, films exclusifs et productions originales, en Ultra HD sur tous vos écrans.</p>
-      <ul class="feature-list">
-        <li><span class="check">✓</span> Catalogue complet en français &amp; VO</li>
-        <li><span class="check">✓</span> Qualité HD / Ultra HD</li>
-        <li><span class="check">✓</span> Compatible TV, mobile, PC</li>
-      </ul>
-      <div class="from-price">À partir de <strong>3 000 FCFA</strong> / mois</div>
-      <a href="#offres" class="btn btn-outline" onclick="selectTab('netflix')">Voir les tarifs Netflix →</a>
-    </div>
-  </div>
-</section>
-
-<!-- ===== PRIME VIDEO ===== -->
-<section class="platform-section" id="prime">
-  <div class="wrap platform-inner reverse reveal">
-    <div class="platform-copy">
-      <span class="eyebrow" style="color:var(--prime); border-color:var(--prime)">Prime Video</span>
-      <h2>Le divertissement Amazon, sans limite</h2>
-      <p>Des blockbusters aux séries exclusives, Prime Video propose un catalogue premium en constante évolution, pensé pour toute la famille.</p>
-      <ul class="feature-list">
-        <li><span class="check">✓</span> Séries exclusives Amazon Original</li>
-        <li><span class="check">✓</span> Location &amp; achat de films récents</li>
-        <li><span class="check">✓</span> Streaming fluide multi-appareils</li>
-      </ul>
-      <div class="from-price">À partir de <strong>3 000 FCFA</strong> / mois</div>
-      <a href="#offres" class="btn btn-outline" onclick="selectTab('prime')">Voir les tarifs Prime Video →</a>
-    </div>
-    <div class="platform-visual">
-      <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
-      <div class="glyph">P</div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== CRUNCHYROLL ===== -->
-<section class="platform-section" id="crunchy">
-  <div class="wrap platform-inner reveal">
-    <div class="platform-visual">
-      <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
-      <div class="glyph">C</div>
-    </div>
-    <div class="platform-copy">
-      <span class="eyebrow" style="color:var(--crunchy); border-color:var(--crunchy)">Crunchyroll</span>
-      <h2>L'univers anime, en simulcast</h2>
-      <p>La plus grande bibliothèque d'animes en streaming, avec les nouveaux épisodes disponibles quelques heures après leur diffusion au Japon.</p>
-      <ul class="feature-list">
-        <li><span class="check">✓</span> Simulcast des derniers épisodes</li>
-        <li><span class="check">✓</span> Milliers d'épisodes en VOSTFR</li>
-        <li><span class="check">✓</span> Sans publicité</li>
-      </ul>
-      <div class="from-price">À partir de <strong>3 000 FCFA</strong> / mois</div>
-      <a href="#offres" class="btn btn-outline" onclick="selectTab('crunchy')">Voir les tarifs Crunchyroll →</a>
-    </div>
-  </div>
-</section>
-
-<!-- ===== OFFRES ===== -->
-<section class="offers-section" id="offres">
-  <div class="wrap">
-    <div style="text-align:center">
-      <span class="eyebrow">Tarifs</span>
-      <h2 class="section-title">Nos offres</h2>
-      <p class="section-sub" style="margin-left:auto; margin-right:auto">Le même tarif clair pour chaque plateforme. Choisissez la durée qui vous convient.</p>
-    </div>
-    <div class="tabs" id="tabBar">
-      <button class="tab-btn active" data-p="netflix" onclick="selectTab('netflix')"><span class="dot" style="background:var(--netflix)"></span> Netflix</button>
-      <button class="tab-btn" data-p="prime" onclick="selectTab('prime')"><span class="dot" style="background:var(--prime)"></span> Prime Video</button>
-      <button class="tab-btn" data-p="crunchy" onclick="selectTab('crunchy')"><span class="dot" style="background:var(--crunchy)"></span> Crunchyroll</button>
-    </div>
-    <div class="pricing-grid" id="pricingGrid"></div>
-  </div>
-</section>
-
-<!-- ===== COMMANDER ===== -->
-<section id="commander">
-  <div class="wrap">
-    <div style="text-align:center">
-      <span class="eyebrow">Simple &amp; rapide</span>
-      <h2 class="section-title">Comment commander</h2>
-      <p class="section-sub" style="margin-left:auto; margin-right:auto">Quatre étapes pour recevoir votre abonnement, sans complication.</p>
-    </div>
-    <div class="steps">
-      <div class="step-card"><div class="step-num">01</div><h3>Choisissez votre abonnement</h3><p>Sélectionnez la plateforme et la durée qui vous conviennent.</p></div>
-      <div class="step-card"><div class="step-num">02</div><h3>Cliquez sur « Choisir cette offre »</h3><p>Un message WhatsApp pré-rempli s'ouvre automatiquement.</p></div>
-      <div class="step-card"><div class="step-num">03</div><h3>Contactez-nous sur WhatsApp</h3><p>Confirmez votre commande et réglez votre paiement.</p></div>
-      <div class="step-card"><div class="step-num">04</div><h3>Recevez votre abonnement</h3><p>Vos identifiants vous sont transmis rapidement, prêts à l'emploi.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== CONTACT ===== -->
-<section id="contact">
-  <div class="wrap">
-    <div class="contact-box">
-      <span class="eyebrow">Contact</span>
-      <h2>Une question avant de commander ?</h2>
-      <p>Notre équipe est disponible sur WhatsApp pour vous accompagner dans le choix de votre abonnement.</p>
-      <div class="phone-display">+237 692 946 633</div>
-      <a href="https://wa.me/237692946633" target="_blank" class="btn btn-gold">💬 Discuter sur WhatsApp</a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <span class="logo">ONE<span style="color:var(--gold)">STREAM</span></span>
-    <p>© 2026 ONE STREAM — Vos abonnements premium, en toute simplicité.</p>
-  </div>
-</footer>
-
-<a class="wa-float" href="https://wa.me/237692946633" target="_blank" aria-label="Commander sur WhatsApp">💬</a>
+    <div class="msg" id="msg2"></div>
+  </section>
+</main>
 
 <script>
-const WHATSAPP_NUMBER = "237692946633";
+(function(){
+  var EMAIL = "tonerfreyd@gmail.com";
+  var Q = [
+    "Est-ce que tu aimes Freyd ?",
+    "Qu’est-ce que tu penses de moi ?",
+    "Serais-tu d’accord que je te prenne dans mes bras ?",
+    "Es-tu heureuse quand on est ensemble ?",
+    "Veux-tu qu’on se prépare un dîner aux chandelles, rien que nous deux ?",
+    "Est-ce que tu me laisses te dire « je t’aime » tous les jours ?"
+  ];
+  var YES_MSG = ["Mon cœur s’emballe…","Merci, chaque mot me touche.","Tes bras, mon plus bel endroit.","Toi aussi, tu me rends heureux.","Je réserve la plus belle table.","Je ne m’en lasserai jamais."];
+  var NO_MSG = "Merci d’être sincère, c’est important pour moi.";
+  var answers = [], i = 0, locked = false, TEXTQ = 1;
+  var $ = function(id){return document.getElementById(id)};
 
-const plans = {
-  netflix: { label:"Netflix", color:"var(--netflix)" },
-  prime:   { label:"Prime Video", color:"var(--prime)" },
-  crunchy: { label:"Crunchyroll", color:"var(--crunchy)" }
-};
+  function show(id){["intro","quiz","end"].forEach(function(s){$(s).classList.toggle("hide", s!==id)})}
+  function dots(){
+    $("dots").innerHTML = Q.map(function(_,k){
+      return '<i class="'+(k<i?"done":k===i?"on":"")+'"></i>';
+    }).join("");
+  }
+  function ask(){
+    $("q").textContent = Q[i]; $("msg").textContent = ""; dots(); locked = false;
+    var isT = (i===TEXTQ); $("yn").classList.toggle("hide", isT); $("txt").classList.toggle("hide", !isT); if(isT){ $("ta").value = ""; }
+  }
+  function flowers(){
+    var set = ["🌸","🌹","🌷","💐","🌺","🌼"];
+    for(var n=0;n<46;n++){
+      var s = document.createElement("span");
+      s.className = "petal";
+      s.textContent = set[Math.floor(Math.random()*set.length)];
+      s.style.left = (Math.random()*100)+"vw";
+      s.style.fontSize = (20+Math.random()*26)+"px";
+      s.style.animationDuration = (2.6+Math.random()*2.4)+"s";
+      s.style.animationDelay = (Math.random()*0.9)+"s";
+      document.body.appendChild(s);
+      (function(el){setTimeout(function(){el.remove()},6500)})(s);
+    }
+  }
+  function answer(yes){
+    if(locked) return; locked = true;
+    answers.push(yes);
+    if(yes===false){ $("msg").textContent = NO_MSG; } else { flowers(); $("msg").textContent = YES_MSG[i]; }
+    setTimeout(function(){ i++; if(i<Q.length){ ask(); } else { finish(); } }, yes===false?1600:2200);
+  }
+  function text(){
+    var lines = ["Réponses de ma chérie :",""];
+    Q.forEach(function(q,k){ lines.push(q+" → "+(typeof answers[k]==="string"?answers[k]:(answers[k]?"OUI":"NON"))); });
+    return lines.join("\n");
+  }
+  function finish(){
+    $("sum").innerHTML = "";
+    Q.forEach(function(q,k){
+      var li = document.createElement("li"), b = document.createElement("b"), a = answers[k];
+      b.textContent = typeof a==="string" ? a : (a?"Oui":"Non");
+      li.appendChild(document.createTextNode(q+" ")); li.appendChild(b); $("sum").appendChild(li);
+    });
+    $("mail").href = "mailto:"+EMAIL+"?subject="+encodeURIComponent("Mes réponses pour toi")+"&body="+encodeURIComponent(text());
+    show("end");
+    if(answers.every(Boolean)) flowers();
+  }
 
-const pricing = [
-  { duration:"1 mois", price:3000, tag:null },
-  { duration:"3 mois", price:8000, tag:null },
-  { duration:"6 mois", price:15000, tag:"Populaire" },
-  { duration:"1 an",   price:33000, tag:"Meilleur prix" }
-];
-
-let activePlan = 'netflix';
-
-function renderPricing(){
-  const p = plans[activePlan];
-  document.getElementById('pricingGrid').innerHTML = pricing.map(item => `
-    <div class="price-card ${item.tag ? 'featured' : ''}" style="${item.tag ? `border-color:${p.color}` : ''}">
-      ${item.tag ? `<div class="tag">${item.tag}</div>` : ''}
-      <div class="duration">${item.duration}</div>
-      <div class="price">${item.price.toLocaleString()} <small>FCFA</small></div>
-      <div class="per">${p.label}</div>
-      <button class="choose-btn" style="background:${p.color}" onclick="orderNow('${activePlan}','${item.duration}',${item.price})">Choisir cette offre</button>
-    </div>
-  `).join('');
-}
-
-function selectTab(planId){
-  activePlan = planId;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.p === planId));
-  renderPricing();
-  document.getElementById('offres').scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-function orderNow(planId, duration, price){
-  const label = plans[planId].label;
-  const text = `Bonjour, je souhaite acheter l'abonnement ${label} de ${duration} à ${price.toLocaleString()} FCFA.`;
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank');
-}
-
-/* Mobile menu */
-const burger = document.getElementById('burgerBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-burger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
-
-/* Scroll reveal */
-const revealEls = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-}, { threshold:0.15 });
-revealEls.forEach(el => io.observe(el));
-
-renderPricing();
+  $("start").onclick = function(){
+    $("start").disabled = true; $("env").classList.add("open");
+    setTimeout(function(){ show("quiz"); ask(); }, 2400);
+  };
+  $("bYes").onclick = function(){ answer(true) };
+  $("bNo").onclick = function(){ answer(false) };
+  $("bNext").onclick = function(){
+    var v = $("ta").value.trim();
+    if(!v){ $("msg").textContent = "Écris quelques mots pour moi."; return; }
+    answer(v);
+  };
+  $("copy").onclick = function(){
+    var t = text();
+    try{
+      navigator.clipboard.writeText(t).then(function(){ $("msg2").textContent = "Copié. Tu peux me le coller en message."; },
+        function(){ $("msg2").textContent = "Copie impossible, utilise le bouton d’envoi."; });
+    }catch(e){ $("msg2").textContent = "Copie impossible, utilise le bouton d’envoi."; }
+  };
+})();
 </script>
-
 </body>
 </html>
